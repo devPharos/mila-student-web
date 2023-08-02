@@ -1,1 +1,1 @@
-# mila-student-web
+mila-student-web
