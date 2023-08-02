@@ -1,7 +1,7 @@
-import Image from 'next/image'
-
 export default function Home() {
   return (
-    <h1>Mila</h1>
+    <div className="bg-warning">
+      <h1>mila</h1>
+    </div>
   )
 }
