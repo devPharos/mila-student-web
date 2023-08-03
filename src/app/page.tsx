@@ -1,11 +1,16 @@
 'use client'
-import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
+  const isLogged = false
+
+  if (!isLogged) {
+    redirect('/login')
+  }
+
   return (
     <div>
-      <Link href="/login">Login</Link>
-      <Link href="/signup">Sign Up</Link>
+      <h1>Student Dashboard</h1>
     </div>
   )
 }
