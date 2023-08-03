@@ -13,6 +13,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-myriad-pro)'],
+      },
       colors: {
         'primary-dark': milaColors.blue[400],
         primary: milaColors.blue[300],
