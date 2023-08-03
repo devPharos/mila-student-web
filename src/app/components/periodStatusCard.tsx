@@ -1,5 +1,5 @@
 import { Card, CardHeader, Chip } from '@nextui-org/react'
-import { CalendarCheck } from 'lucide-react'
+import { CalendarCheck, CalendarX } from 'lucide-react'
 
 interface IPeriodStatusCard {
   type: 'absence' | 'frequency'
@@ -19,7 +19,7 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
         <div className="flex items-center gap-2">
           {type === 'absence' ? (
             <>
-              <CalendarCheck size={20} className="text-primary" />
+              <CalendarX size={20} className="text-primary" />
               <span>Period Total Absences</span>
             </>
           ) : (
