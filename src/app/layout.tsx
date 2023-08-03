@@ -1,6 +1,8 @@
+'use client'
 import './globals.css'
 import type { Metadata } from 'next'
 import localFont from '@next/font/local'
+import { Providers } from './providers'
 
 const myriadPro = localFont({
   src: [
@@ -27,7 +29,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${myriadPro.variable} font-sans`}>{children}</body>
+      <Providers>
+        <body className={`${myriadPro.variable} font-sans`}>{children}</body>
+      </Providers>
     </html>
   )
 }
