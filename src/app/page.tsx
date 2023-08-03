@@ -1,5 +1,6 @@
 'use client'
 import { redirect } from 'next/navigation'
+import Dashboard from './dashboard/page'
 
 export default function Home() {
   const isLogged = false
@@ -10,7 +11,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Student Dashboard</h1>
+      <Dashboard />
     </div>
   )
 }
