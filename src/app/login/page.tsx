@@ -61,11 +61,12 @@ export default function Login() {
               classNames={{
                 label: 'text-neutral',
                 input: [
-                  'bg-white',
+                  validateEmail === 'invalid' ? 'bg-error-light' : 'bg-white',
                   validateEmail === 'invalid'
                     ? 'text-error'
                     : 'text-neutral-dark',
                 ],
+                errorMessage: 'text-error',
               }}
               startContent={
                 <AtSign

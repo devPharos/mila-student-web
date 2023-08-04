@@ -1,6 +1,7 @@
 'use client'
 
 import { DashboardClassCard } from '../components/dashboardClassCard'
+import { DashboardClassesCard } from '../components/dashboardClassesCard'
 import { Header } from '../components/header'
 import { PeriodStatusCard } from '../components/periodStatusCard'
 
@@ -16,6 +17,8 @@ export default function Dashboard() {
         </div>
 
         <DashboardClassCard />
+
+        <DashboardClassesCard />
       </div>
     </div>
   )
