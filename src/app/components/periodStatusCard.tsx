@@ -12,7 +12,7 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
       shadow="none"
       classNames={{
         header: ['text-primary', 'p-0', 'font-semibold', 'justify-between'],
-        base: ['rounded-[32px]', 'p-6'],
+        base: ['rounded-[24px]', 'p-4'],
       }}
     >
       <CardHeader>
@@ -31,8 +31,8 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
         </div>
         <Chip
           classNames={{
-            base: 'bg-success-light ',
-            content: 'text-success-dark font-semibold text-md',
+            base: 'bg-information-light',
+            content: 'text-information font-semibold text-md',
           }}
           variant="flat"
           radius="sm"

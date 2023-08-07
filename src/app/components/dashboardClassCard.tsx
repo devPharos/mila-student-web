@@ -14,7 +14,7 @@ export function DashboardClassCard() {
       classNames={{
         header: ['text-primary', 'p-0', 'gap-2 flex-col items-start'],
         body: ['p-0 pt-4 gap-2 items-center'],
-        base: ['rounded-[32px]', 'p-6'],
+        base: ['rounded-[24px]', 'p-4'],
       }}
     >
       <CardHeader>
@@ -24,35 +24,23 @@ export function DashboardClassCard() {
         </div>
 
         <div className="flex gap-4 flex-wrap align-left">
-          <span className="text-sm text-neutral-dark ">
-            <span className="text-primary font-semibold">Teacher: </span>
+          <span className="text-sm text-neutral">
+            <span className="text-neutral-dark font-semibold">Teacher: </span>
             Jeaneth Chirinos
           </span>
 
-          <span className="text-sm text-neutral-dark ">
-            <span className="text-primary font-semibold">
-              Class start date:{' '}
+          <span className="text-sm text-neutral">
+            <span className="text-neutral-dark font-semibold">
+              Class SD/ED:{' '}
             </span>
-            Feb 21st 2022
+            Feb 21st, 2022 to Jun 21st, 2022
           </span>
 
-          <span className="text-sm text-neutral-dark ">
-            <span className="text-primary font-semibold">Class end date: </span>
-            Jun 21st 2022
-          </span>
-
-          <span className="text-sm text-neutral-dark ">
-            <span className="text-primary font-semibold">
-              Student start date:{' '}
+          <span className="text-sm text-neutral">
+            <span className="text-neutral-dark font-semibold">
+              Student SD/EN:{' '}
             </span>
-            Mar 7th 2022
-          </span>
-
-          <span className="text-sm text-neutral-dark ">
-            <span className="text-primary font-semibold">
-              Student end date:{' '}
-            </span>
-            Jun 21st 2022
+            Mar 7th, 2022 to Jun 21st, 2022
           </span>
         </div>
       </CardHeader>
@@ -91,30 +79,30 @@ export function DashboardClassCard() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="flex items-center w-full justify-between gap-2">
-              <span className="text-neutral-dark">Final average grade</span>
-              <Chip
-                classNames={{
-                  base: 'bg-warning-light',
-                  content: 'text-warning font-semibold text-md',
-                }}
-                variant="flat"
-                radius="sm"
-              >
-                In progress
-              </Chip>
-            </div>
-
             <div className="flex gap-4">
               <div className="flex gap-2 items-center">
                 <div className="w-[20px] h-[20px] bg-secondary rounded-[4px]"></div>
-                <span className="text-neutral-dark">72% Content given</span>
+                <span className="text-error">72% Content given</span>
               </div>
 
               <div className="flex gap-2 items-center">
                 <div className="w-[20px] h-[20px] bg-primary rounded-[4px]"></div>
-                <span className="text-neutral-dark">72% Content given</span>
+                <span className="text-primary">72% Content given</span>
               </div>
+            </div>
+
+            <div className="flex items-center w-full justify-between gap-2">
+              <span className="text-neutral-dark">Final average grade</span>
+              <Chip
+                classNames={{
+                  base: 'bg-neutral-lighter',
+                  content: 'text-neutral font-semibold text-md',
+                }}
+                variant="flat"
+                radius="sm"
+              >
+                In progress...
+              </Chip>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { CheckCheck } from 'lucide-react'
 
 export function DashboardClassesCard() {
   const itemClasses = {
-    base: 'w-full bg-white p-6 rounded-[32px]',
+    base: 'w-full bg-white p-4 rounded-[24px]',
     title: 'font-md font-semibold text-primary',
     subtitle: 'text-neutral',
     trigger: 'bg-white p-0',
@@ -29,14 +29,12 @@ export function DashboardClassesCard() {
 
           <Chip
             classNames={{
-              base: 'bg-success-light',
-              content: 'text-success-dark font-semibold text-md',
+              base: 'bg-information-light',
+              content: 'text-information font-semibold text-md',
             }}
             variant="flat"
             radius="sm"
-            startContent={
-              <CheckCheck size={18} className="text-success-dark" />
-            }
+            startContent={<CheckCheck size={18} className="text-information" />}
           >
             Present
           </Chip>
