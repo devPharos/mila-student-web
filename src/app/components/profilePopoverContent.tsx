@@ -1,6 +1,7 @@
 import { Avatar, Divider, Button } from '@nextui-org/react'
 import { AtSign, Building, Backpack, CalendarClock, LogOut } from 'lucide-react'
 import { useQRCode } from 'next-qrcode'
+import { redirect } from 'next/navigation'
 
 export function ProfilePopoverContent() {
   const { Canvas } = useQRCode()
@@ -52,7 +53,11 @@ export function ProfilePopoverContent() {
 
       <Divider />
 
-      <Button className="bg-error-light text-error" radius="sm">
+      <Button
+        className="bg-error-light text-error"
+        radius="sm"
+        onClick={() => redirect('/login')}
+      >
         Log out
         <LogOut className="text-error" size={18} />
       </Button>

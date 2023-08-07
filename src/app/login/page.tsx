@@ -16,7 +16,7 @@ import { useState } from 'react'
 export default function Login() {
   dotenv.config()
 
-  const [passwordError, setPasswordError] = useState<boolean>(false)
+  const [credentialError, setCredentialError] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
   const router = useRouter()
@@ -33,6 +33,25 @@ export default function Login() {
   })
 
   type TLoginFormData = z.infer<typeof loginFormSchema>
+
+  const handleLogin = (userData: TLoginFormData, data: any) => {
+    if (data.Sucesso) {
+      signInWithEmailAndPassword(auth, userData.email, userData.password)
+        .then(() => {
+          setLoading(true)
+          router.push('/dashboard')
+        })
+        .catch((error) => {
+          const errorStatusCode = error.code
+          const errorMessage = error.message
+
+          console.log(errorStatusCode, errorMessage)
+
+          setLoading(false)
+          setCredentialError(true)
+        })
+    }
+  }
 
   const verifyUser = async (userData: TLoginFormData) => {
     let response
@@ -52,25 +71,10 @@ export default function Login() {
     if (response?.ok) {
       const data = await response?.json()
 
-      if (data.Sucesso) {
-        signInWithEmailAndPassword(auth, userData.email, userData.password)
-          .then(() => {
-            setLoading(true)
-            router.push('/dashboard')
-          })
-          .catch((error) => {
-            const errorStatusCode = error.code
-            const errorMessage = error.message
-
-            console.log(errorStatusCode, errorMessage)
-
-            setLoading(false)
-            setPasswordError(true)
-          })
-      }
+      handleLogin(userData, data)
     } else {
       setLoading(false)
-      setPasswordError(true)
+      setCredentialError(true)
     }
   }
 
@@ -177,7 +181,7 @@ export default function Login() {
               {...register('password')}
             />
 
-            {passwordError && (
+            {credentialError && (
               <span className="text-sm text-error">
                 Review your credentials
               </span>
