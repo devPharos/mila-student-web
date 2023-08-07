@@ -2,32 +2,109 @@
 
 import { Fingerprint, AtSign, Lock, LogIn } from 'lucide-react'
 import { Image, Input, Button } from '@nextui-org/react'
+import { z } from 'zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import logo from '../assets/logo.png'
 import Link from 'next/link'
-import { z } from 'zod'
+import * as dotenv from 'dotenv'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../api/firebase'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Login() {
-  const [value, setValue] = useState<string | undefined>('')
-  const [validateEmail, setValidateEmail] = useState<
-    'invalid' | 'valid' | undefined
-  >(undefined)
+  dotenv.config()
 
-  const emailSchema = z.string().email()
+  const [passwordError, setPasswordError] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  function handleEmailValidation() {
+  const router = useRouter()
+
+  const loginFormSchema = z.object({
+    registrationNumber: z
+      .string()
+      .toUpperCase()
+      .min(1, 'Type your registration number'),
+    email: z.string().email({
+      message: 'Type a valid e-mail',
+    }),
+    password: z.string().min(8, 'Type a valid password'),
+  })
+
+  type TLoginFormData = z.infer<typeof loginFormSchema>
+
+  const verifyUser = async (userData: TLoginFormData) => {
+    let response
+
     try {
-      emailSchema.parse(value)
-      setValidateEmail('valid')
+      response = await fetch(
+        `${process.env.API_URL}/students/${userData.registrationNumber}/${userData.email}/`,
+      )
+
+      setLoading(true)
     } catch (error) {
-      setValidateEmail('invalid')
+      setLoading(false)
+
+      console.log(error)
     }
+
+    if (response?.ok) {
+      const data = await response?.json()
+
+      if (data.Sucesso) {
+        signInWithEmailAndPassword(auth, userData.email, userData.password)
+          .then(() => {
+            setLoading(true)
+            router.push('/dashboard')
+          })
+          .catch((error) => {
+            const errorStatusCode = error.code
+            const errorMessage = error.message
+
+            console.log(errorStatusCode, errorMessage)
+
+            setLoading(false)
+            setPasswordError(true)
+          })
+      }
+    } else {
+      setLoading(false)
+      setPasswordError(true)
+    }
+  }
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<TLoginFormData>({
+    resolver: zodResolver(loginFormSchema),
+  })
+
+  const handleLoginSubmit: SubmitHandler<TLoginFormData> = (
+    data: TLoginFormData,
+  ) => {
+    const userLoginData: TLoginFormData = {
+      email: data.email,
+      password: data.password,
+      registrationNumber: data.registrationNumber,
+    }
+
+    verifyUser(userLoginData)
+
+    reset()
   }
 
   return (
     <div className="grid grid-cols-2 min-h-screen">
       <div className="bg-primary"></div>
-      <div className="bg-neutral-lighter flex flex-col items-center justify-center p-6">
+      <form
+        action=""
+        className="bg-neutral-lighter flex flex-col items-center justify-center p-6 w-full"
+        onSubmit={handleSubmit(handleLoginSubmit)}
+      >
         <div className="max-w-sm w-full flex flex-col items-center gap-14">
           <Image
             width={130}
@@ -40,70 +117,79 @@ export default function Login() {
           <div className="flex flex-col gap-6 w-full">
             <Input
               label="Registration number"
-              isRequired
+              id="registrationNumber"
               classNames={{
                 label: 'text-neutral',
                 input: ['bg-white', 'text-neutral-dark'],
               }}
               startContent={
                 <Fingerprint
-                  className="text-neutral"
-                  strokeWidth={1.5}
-                  size={20}
-                />
-              }
-            />
-
-            <Input
-              label="Email"
-              type="email"
-              isRequired
-              classNames={{
-                label: 'text-neutral',
-                input: [
-                  validateEmail === 'invalid' ? 'bg-error-light' : 'bg-white',
-                  validateEmail === 'invalid'
-                    ? 'text-error'
-                    : 'text-neutral-dark',
-                ],
-                errorMessage: 'text-error',
-              }}
-              startContent={
-                <AtSign
                   className={
-                    validateEmail === 'invalid' ? 'text-error' : 'text-neutral'
+                    errors.registrationNumber ? 'text-error' : 'text-neutral'
                   }
                   strokeWidth={1.5}
                   size={20}
                 />
               }
-              value={value}
-              onValueChange={setValue}
-              validationState={validateEmail}
-              errorMessage={
-                validateEmail === 'invalid' && 'Please enter a valid email'
+              errorMessage={errors.registrationNumber?.message}
+              validationState={errors.registrationNumber && 'invalid'}
+              {...register('registrationNumber')}
+            />
+
+            <Input
+              label="Email"
+              type="email"
+              id="email"
+              classNames={{
+                label: 'text-neutral',
+                input: ['text-neutral-dark'],
+                errorMessage: 'text-error',
+              }}
+              startContent={
+                <AtSign
+                  className={errors.email ? 'text-error' : 'text-neutral'}
+                  strokeWidth={1.5}
+                  size={20}
+                />
               }
+              errorMessage={errors.email?.message}
+              validationState={errors.email && 'invalid'}
+              {...register('email')}
             />
 
             <Input
               label="Password"
               type="password"
-              isRequired
+              id="password"
               classNames={{
                 label: 'text-neutral',
                 input: ['bg-white', 'text-neutral-dark'],
               }}
               startContent={
-                <Lock className="text-neutral" strokeWidth={1.5} size={20} />
+                <Lock
+                  className={errors.password ? 'text-error' : 'text-neutral'}
+                  strokeWidth={1.5}
+                  size={20}
+                />
               }
+              errorMessage={errors.password?.message}
+              validationState={errors.password && 'invalid'}
+              {...register('password')}
             />
+
+            {passwordError && (
+              <span className="text-sm text-error">
+                Review your credentials
+              </span>
+            )}
           </div>
 
           <Button
             className="bg-primary text-white w-full"
             endContent={<LogIn size={20} />}
             radius="md"
-            onClick={handleEmailValidation}
+            type="submit"
+            isLoading={loading}
           >
             Log In
           </Button>
@@ -112,7 +198,7 @@ export default function Login() {
             This is my first access
           </Link>
         </div>
-      </div>
+      </form>
     </div>
   )
 }
