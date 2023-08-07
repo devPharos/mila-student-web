@@ -29,9 +29,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Providers>
-        <body className={`${myriadPro.variable} font-sans`}>{children}</body>
-      </Providers>
+      <body className={`${myriadPro.variable} font-sans`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }
