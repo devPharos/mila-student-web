@@ -10,7 +10,6 @@ import Link from 'next/link'
 import * as dotenv from 'dotenv'
 import {
   EmailAuthProvider,
-  User,
   browserSessionPersistence,
   setPersistence,
   signInWithEmailAndPassword,
@@ -19,6 +18,7 @@ import { auth } from '../api/firebase'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
+import { Router } from 'next/router'
 
 export default function Login() {
   dotenv.config()
@@ -29,9 +29,13 @@ export default function Login() {
   const router = useRouter()
   const userAuth = useAuth()
 
-  if (userAuth.user) {
-    router.push('/dashboard')
+  const handleRouteChangeComplete = () => {
+    if (userAuth.user) {
+      router.push('/dashboard')
+    }
   }
+
+  Router.events.on('routeChangeComplete', handleRouteChangeComplete)
 
   const loginFormSchema = z.object({
     registrationNumber: z
@@ -60,7 +64,7 @@ export default function Login() {
 
               EmailAuthProvider.credential(userData.email, userData.password)
 
-              // router.push('/dashboard')
+              router.push('/dashboard')
             })
             .catch((error) => {
               const errorStatusCode = error.code

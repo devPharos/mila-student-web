@@ -1,10 +1,19 @@
 import { Avatar, Divider, Button } from '@nextui-org/react'
+import { signOut } from 'firebase/auth'
 import { AtSign, Building, Backpack, CalendarClock, LogOut } from 'lucide-react'
 import { useQRCode } from 'next-qrcode'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { auth } from '../api/firebase'
 
 export function ProfilePopoverContent() {
   const { Canvas } = useQRCode()
+  const router = useRouter()
+
+  const logOut = () => {
+    signOut(auth)
+
+    router.push('/login')
+  }
 
   return (
     <div className="px-1 py-2 flex flex-col items-center justify-center gap-6">
@@ -56,7 +65,7 @@ export function ProfilePopoverContent() {
       <Button
         className="bg-error-light text-error"
         radius="sm"
-        onClick={() => redirect('/login')}
+        onPress={logOut}
       >
         Log out
         <LogOut className="text-error" size={18} />
