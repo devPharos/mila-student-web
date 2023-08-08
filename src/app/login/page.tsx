@@ -8,10 +8,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import logo from '../assets/logo.png'
 import Link from 'next/link'
 import * as dotenv from 'dotenv'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import {
+  EmailAuthProvider,
+  User,
+  browserSessionPersistence,
+  setPersistence,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 import { auth } from '../api/firebase'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import useAuth from '../hooks/useAuth'
 
 export default function Login() {
   dotenv.config()
@@ -20,6 +27,11 @@ export default function Login() {
   const [loading, setLoading] = useState<boolean>(false)
 
   const router = useRouter()
+  const userAuth = useAuth()
+
+  if (userAuth.user) {
+    router.push('/dashboard')
+  }
 
   const loginFormSchema = z.object({
     registrationNumber: z
@@ -36,19 +48,35 @@ export default function Login() {
 
   const handleLogin = (userData: TLoginFormData, data: any) => {
     if (data.Sucesso) {
-      signInWithEmailAndPassword(auth, userData.email, userData.password)
+      setPersistence(auth, browserSessionPersistence)
         .then(() => {
-          setLoading(true)
-          router.push('/dashboard')
+          return signInWithEmailAndPassword(
+            auth,
+            userData.email,
+            userData.password,
+          )
+            .then(() => {
+              setLoading(true)
+
+              EmailAuthProvider.credential(userData.email, userData.password)
+
+              // router.push('/dashboard')
+            })
+            .catch((error) => {
+              const errorStatusCode = error.code
+              const errorMessage = error.message
+
+              console.log(errorStatusCode, errorMessage)
+
+              setLoading(false)
+              setCredentialError(true)
+            })
         })
         .catch((error) => {
           const errorStatusCode = error.code
           const errorMessage = error.message
 
           console.log(errorStatusCode, errorMessage)
-
-          setLoading(false)
-          setCredentialError(true)
         })
     }
   }
