@@ -17,25 +17,21 @@ import {
 import { auth } from '../api/firebase'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import useAuth from '../hooks/useAuth'
-import { Router } from 'next/router'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function Login() {
   dotenv.config()
 
   const [credentialError, setCredentialError] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loginLoading, setLoading] = useState<boolean>(false)
 
   const router = useRouter()
-  const userAuth = useAuth()
 
-  const handleRouteChangeComplete = () => {
-    if (userAuth.user) {
-      router.push('/dashboard')
-    }
+  const [user, loading] = useAuthState(auth)
+
+  if (!loading && user) {
+    router.push('/dashboard')
   }
-
-  Router.events.on('routeChangeComplete', handleRouteChangeComplete)
 
   const loginFormSchema = z.object({
     registrationNumber: z
@@ -225,7 +221,7 @@ export default function Login() {
             endContent={<LogIn size={20} />}
             radius="md"
             type="submit"
-            isLoading={loading}
+            isLoading={loginLoading}
           >
             Log In
           </Button>
