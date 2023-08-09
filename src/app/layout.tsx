@@ -3,6 +3,9 @@ import './globals.css'
 import type { Metadata } from 'next'
 import localFont from '@next/font/local'
 import { Providers } from './providers'
+import { usePathname, useRouter } from 'next/navigation'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from './api/firebase'
 
 const myriadPro = localFont({
   src: [
@@ -27,6 +30,37 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathName = usePathname()
+  const APP_ROUTES = {
+    public: {
+      login: '/login',
+      first_access: '/signup',
+    },
+  }
+  const router = useRouter()
+
+  const isPublic = Object.values(APP_ROUTES.public).includes(pathName)
+
+  const [user, loading] = useAuthState(auth)
+
+  if (!isPublic && !user && !loading) {
+    router.replace('/login')
+  }
+
+  if (isPublic && user && !loading) {
+    router.replace('/dashboard')
+  }
+
+  if (loading) {
+    return (
+      <html lang="en">
+        <body className={`${myriadPro.variable} font-sans`}>
+          <div></div>
+        </body>
+      </html>
+    )
+  }
+
   return (
     <html lang="en">
       <body className={`${myriadPro.variable} font-sans`}>

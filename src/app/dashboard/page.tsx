@@ -1,21 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { DashboardClassCard } from '../components/dashboardClassCard'
 import { DashboardClassesCard } from '../components/dashboardClassesCard'
 import { Header } from '../components/header'
 import { PeriodStatusCard } from '../components/periodStatusCard'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '../api/firebase'
 
 export default function Dashboard() {
-  const router = useRouter()
-  const [user, loading] = useAuthState(auth)
-
-  if (!loading && !user) {
-    router.push('/login')
-  }
-
   return (
     <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
       <Header />

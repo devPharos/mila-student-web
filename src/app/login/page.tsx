@@ -17,7 +17,6 @@ import {
 import { auth } from '../api/firebase'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function Login() {
   dotenv.config()
@@ -26,12 +25,6 @@ export default function Login() {
   const [loginLoading, setLoading] = useState<boolean>(false)
 
   const router = useRouter()
-
-  const [user, loading] = useAuthState(auth)
-
-  if (!loading && user) {
-    router.push('/dashboard')
-  }
 
   const loginFormSchema = z.object({
     registrationNumber: z
