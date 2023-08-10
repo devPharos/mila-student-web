@@ -1,12 +1,12 @@
 'use client'
 
-import { Input, Image } from '@nextui-org/react'
-import { Lock } from 'lucide-react'
+import { Image } from '@nextui-org/react'
 import logo from '../assets/logo.png'
 import { Steps } from '../components/steps'
 import { useState } from 'react'
 import SignUpFirstStep from '../components/signUpSteps/firstStep'
 import Link from 'next/link'
+import SignUpSecondStep from '../components/signUpSteps/secondStep'
 export default function SignUp() {
   const [step, setStep] = useState<'step-1' | 'step-2' | 'step-3'>('step-1')
   const [userExists, setUserExists] = useState<boolean>(false)
@@ -22,7 +22,9 @@ export default function SignUp() {
   }
 
   const checkIfUserExists = (exists: boolean) => {
-    setUserExists(exists)
+    // setUserExists(exists)
+    setUserExists(false)
+    setStep('step-2')
   }
 
   return (
@@ -47,39 +49,7 @@ export default function SignUp() {
                 changeStep={changeStep}
               />
             ) : step === 'step-2' ? (
-              <>
-                <Input
-                  label="Password"
-                  isRequired
-                  classNames={{
-                    label: 'text-neutral',
-                    input: ['bg-white', 'text-neutral-dark'],
-                  }}
-                  startContent={
-                    <Lock
-                      className="text-neutral"
-                      strokeWidth={1.5}
-                      size={20}
-                    />
-                  }
-                />
-
-                <Input
-                  label="Confirm your password"
-                  isRequired
-                  classNames={{
-                    label: 'text-neutral',
-                    input: ['bg-white', 'text-neutral-dark'],
-                  }}
-                  startContent={
-                    <Lock
-                      className="text-neutral"
-                      strokeWidth={1.5}
-                      size={20}
-                    />
-                  }
-                />
-              </>
+              <SignUpSecondStep changeStep={changeStep} />
             ) : (
               <>
                 <div className="flex flex-col items-center text-center">
