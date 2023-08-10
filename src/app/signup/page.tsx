@@ -11,7 +11,7 @@ export default function SignUp() {
   const [step, setStep] = useState<'step-1' | 'step-2' | 'step-3'>('step-1')
   const [userExists, setUserExists] = useState<boolean>(false)
 
-  const changeStep = () => {
+  const changeStep = (step: 'step-1' | 'step-2' | 'step-3') => {
     switch (step) {
       case 'step-1':
         setStep('step-2')
@@ -42,7 +42,10 @@ export default function SignUp() {
 
           <div className="w-full">
             {step === 'step-1' ? (
-              <SignUpFirstStep checkIfUserExists={checkIfUserExists} />
+              <SignUpFirstStep
+                checkIfUserExists={checkIfUserExists}
+                changeStep={changeStep}
+              />
             ) : step === 'step-2' ? (
               <>
                 <Input

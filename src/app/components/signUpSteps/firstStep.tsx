@@ -9,10 +9,12 @@ import { z } from 'zod'
 
 interface IFirstStepProps {
   checkIfUserExists: (exists: boolean) => void
+  changeStep: (step: 'step-1' | 'step-2' | 'step-3') => void
 }
 
 export default function SignUpFirstStep({
   checkIfUserExists,
+  changeStep,
 }: IFirstStepProps) {
   const [userExists, setUserExists] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -84,7 +86,7 @@ export default function SignUpFirstStep({
         setLoading(true)
         checkIfUserExists(true)
       } else {
-        // changeStep()
+        changeStep('step-1')
         setLoading(false)
       }
 
