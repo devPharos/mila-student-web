@@ -15,7 +15,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 import { auth } from '../api/firebase'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Login() {
@@ -23,6 +23,15 @@ export default function Login() {
 
   const [credentialError, setCredentialError] = useState<boolean>(false)
   const [loginLoading, setLoading] = useState<boolean>(false)
+  const searchParams = useSearchParams()
+  let emailFromSignUp = ''
+  let registrationNumberFromSignUp = ''
+  const existentUserCredentials = Array.from(searchParams.values())
+
+  if (existentUserCredentials.length !== 0) {
+    emailFromSignUp = existentUserCredentials[0]
+    registrationNumberFromSignUp = existentUserCredentials[1]
+  }
 
   const router = useRouter()
 
@@ -159,6 +168,7 @@ export default function Login() {
               errorMessage={errors.registrationNumber?.message}
               validationState={errors.registrationNumber && 'invalid'}
               {...register('registrationNumber')}
+              defaultValue={registrationNumberFromSignUp}
             />
 
             <Input
@@ -180,6 +190,7 @@ export default function Login() {
               errorMessage={errors.email?.message}
               validationState={errors.email && 'invalid'}
               {...register('email')}
+              defaultValue={emailFromSignUp}
             />
 
             <Input

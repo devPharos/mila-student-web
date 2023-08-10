@@ -3,7 +3,6 @@ interface IStepProps {
 }
 
 export function Steps({ step }: IStepProps) {
-  console.log(step)
   return (
     <div className="flex items-center justify-center gap-4 w-full">
       <div className="relative">

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Input, Image } from '@nextui-org/react'
-import { Fingerprint, AtSign, Lock, ArrowRight } from 'lucide-react'
+import { Fingerprint, AtSign, Lock, ArrowRight, ArrowLeft } from 'lucide-react'
 import logo from '../assets/logo.png'
 import Link from 'next/link'
 import { Steps } from '../components/steps'
@@ -9,9 +9,13 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { doc, getDoc, getFirestore } from 'firebase/firestore'
+import { useRouter } from 'next/navigation'
 
 export default function SignUp() {
   const [step, setStep] = useState<'step-1' | 'step-2' | 'step-3'>('step-1')
+  const router = useRouter()
+  const [userExists, setUserExists] = useState<boolean>(false)
 
   const changeStep = () => {
     switch (step) {
@@ -23,7 +27,7 @@ export default function SignUp() {
     }
   }
 
-  const signUpFormSchema = z.object({
+  const signUpFormFirstStepSchema = z.object({
     registrationNumber: z
       .string()
       .toUpperCase()
@@ -31,42 +35,79 @@ export default function SignUp() {
     email: z.string().email({
       message: 'Type a valid e-mail',
     }),
-    password: z.string().min(8, 'Type a valid password'),
-    confirmPassword: z.string().min(8, 'Type a valid password'),
   })
 
-  type TSignUpData = z.infer<typeof signUpFormSchema>
+  type TSignUpFirstStepData = z.infer<typeof signUpFormFirstStepSchema>
+
+  const [user, setUser] = useState<TSignUpFirstStepData | null>(null)
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TSignUpData>({
-    resolver: zodResolver(signUpFormSchema),
+  } = useForm<TSignUpFirstStepData>({
+    resolver: zodResolver(signUpFormFirstStepSchema),
   })
 
-  const handleSignUpSubmit: SubmitHandler<TSignUpData> = (
-    data: TSignUpData,
+  const handleSignUpFirstStepSubmit: SubmitHandler<TSignUpFirstStepData> = (
+    data: TSignUpFirstStepData,
   ) => {
-    const userSignUpData: TSignUpData = {
+    const userSignUpFirstStepData: TSignUpFirstStepData = {
       email: data.email,
-      password: data.password,
       registrationNumber: data.registrationNumber,
-      confirmPassword: data.confirmPassword,
     }
 
+    verifyCredentials(userSignUpFirstStepData)
+
+    // changeStep()
+
     reset()
+  }
+
+  const verifyCredentials = async (userData: TSignUpFirstStepData) => {
+    let response
+
+    try {
+      response = await fetch(
+        `${process.env.API_URL}/students/${userData.registrationNumber}/${userData.email}/`,
+      )
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (response?.ok) {
+      const studentData = await response?.json()
+      const studentID = studentData.data.studentID
+
+      const db = getFirestore()
+
+      const docRef = doc(db, 'Students', userData.registrationNumber)
+
+      const docSnap = await getDoc(docRef)
+
+      if (docSnap.exists()) {
+        const existentUser = {
+          email: userData.email,
+          registrationNumber: userData.registrationNumber,
+        }
+        setUserExists(true)
+        setUser(existentUser)
+      } else {
+        console.log('nao existe')
+      }
+
+      return studentID
+    } else {
+      console.log('')
+    }
   }
 
   return (
     <div className="grid grid-cols-2 min-h-screen">
       <div className="bg-primary"></div>
       <div className="bg-neutral-lighter flex flex-col items-center justify-center p-6">
-        <form
-          className="max-w-sm w-full flex flex-col items-center gap-14"
-          onSubmit={handleSubmit(handleSignUpSubmit)}
-        >
+        <div className="max-w-sm w-full flex flex-col items-center gap-14">
           <Steps step={step} />
 
           <Image
@@ -77,9 +118,13 @@ export default function SignUp() {
             className="rounded-none"
           />
 
-          <div className="flex flex-col gap-6 w-full">
+          <div className="w-full">
             {step === 'step-1' ? (
-              <>
+              <form
+                action=""
+                onSubmit={handleSubmit(handleSignUpFirstStepSubmit)}
+                className="flex flex-col gap-6 w-full"
+              >
                 <Input
                   label="Registration number"
                   id="registrationNumber"
@@ -105,20 +150,56 @@ export default function SignUp() {
 
                 <Input
                   label="Email"
-                  isRequired
                   classNames={{
                     label: 'text-neutral',
                     input: ['bg-white', 'text-neutral-dark'],
                   }}
                   startContent={
                     <AtSign
-                      className="text-neutral"
+                      className={errors.email ? 'text-error' : 'text-neutral'}
                       strokeWidth={1.5}
                       size={20}
                     />
                   }
+                  errorMessage={errors.email?.message}
+                  validationState={errors.email && 'invalid'}
+                  {...register('email')}
                 />
-              </>
+
+                <span className={userExists ? 'text-error' : 'hidden'}>
+                  You already have an account
+                </span>
+
+                <Link
+                  className={
+                    userExists
+                      ? 'flex items-center justify-center gap-2 rounded-xl text-white bg-primary p-2'
+                      : 'hidden'
+                  }
+                  href={{
+                    pathname: '/login',
+                    query: {
+                      email: user?.email,
+                      registrationNumber: user?.registrationNumber,
+                    },
+                  }}
+                >
+                  <ArrowLeft size={20} className="text-white" />
+                  Back to login
+                </Link>
+
+                <Button
+                  className={
+                    userExists ? 'hidden' : 'bg-primary text-white w-full'
+                  }
+                  endContent={<ArrowRight size={20} />}
+                  radius="md"
+                  type="submit"
+                  isDisabled={userExists}
+                >
+                  Continue
+                </Button>
+              </form>
             ) : step === 'step-2' ? (
               <>
                 <Input
@@ -171,22 +252,15 @@ export default function SignUp() {
             )}
           </div>
 
-          <Button
+          <Link
+            href="/login"
             className={
-              step === 'step-3' ? 'hidden' : 'bg-primary text-white w-full'
+              userExists ? 'hidden' : 'font-semibold text-primary text-sm'
             }
-            endContent={<ArrowRight size={20} />}
-            radius="md"
-            onClick={changeStep}
-            type="submit"
           >
-            Continue
-          </Button>
-
-          <Link href="/login" className="font-semibold text-primary text-sm">
             Back to Log In
           </Link>
-        </form>
+        </div>
       </div>
     </div>
   )
