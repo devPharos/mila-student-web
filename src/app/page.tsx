@@ -1,7 +1,7 @@
 'use client'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Dashboard from './dashboard/page'
-import Login from './login/page'
+import Login from './(auth)/login/page'
 import { auth } from './api/firebase'
 
 export default function Home() {

@@ -1,15 +1,33 @@
+import { auth } from '@/app/api/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { collection, getFirestore } from 'firebase/firestore'
 import { ArrowRight, Eye, EyeOff, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useCollection } from 'react-firebase-hooks/firestore'
+
+interface IUserFirstStepData {
+  email: string
+  registrationNumber: string
+  studentID: number
+}
+
+interface IUserData extends IUserFirstStepData {
+  password: string
+}
 
 interface ISecondStepProps {
   changeStep: (step: 'step-1' | 'step-2' | 'step-3') => void
+  userFirstStepData: IUserFirstStepData
 }
 
-export default function SignUpSecondStep({ changeStep }: ISecondStepProps) {
+export default function SignUpSecondStep({
+  changeStep,
+  userFirstStepData,
+}: ISecondStepProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false)
@@ -40,14 +58,24 @@ export default function SignUpSecondStep({ changeStep }: ISecondStepProps) {
   const handleSignUpSecondStepSubmit: SubmitHandler<TSignUpSecondStepData> = (
     data: TSignUpSecondStepData,
   ) => {
-    const userSignUpFirstStepData: TSignUpSecondStepData = {
+    const userSignUpSecondStepData: IUserData = {
+      email: userFirstStepData?.email,
+      registrationNumber: userFirstStepData?.registrationNumber,
+      studentID: userFirstStepData?.studentID,
       password: data.password,
-      confirmPassword: data.confirmPassword,
     }
 
-    setUser(userSignUpFirstStepData)
-
-    reset()
+    try {
+      createUserWithEmailAndPassword(
+        auth,
+        userSignUpSecondStepData.password,
+        userSignUpSecondStepData.email,
+      ).then(() => {
+        console.log('')
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handlePasswordVisibility = () =>

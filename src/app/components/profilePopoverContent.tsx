@@ -15,6 +15,17 @@ export function ProfilePopoverContent() {
     router.push('/login')
   }
 
+  // if (user && !loading) {
+  //   const db = getFirestore()
+  //   onSnapshot(
+  //     doc(db, 'Students', userData.registrationNumber),
+  //     { includeMetadataChanges: true },
+  //     (doc) => {
+  //       console.log(doc.data())
+  //     },
+  //   )
+  // }
+
   return (
     <div className="px-1 py-2 flex flex-col items-center justify-center gap-6">
       <div className="flex flex-col gap-1 items-center w-full">

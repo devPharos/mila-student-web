@@ -8,8 +8,21 @@ import SignUpFirstStep from '../components/signUpSteps/firstStep'
 import Link from 'next/link'
 import SignUpSecondStep from '../components/signUpSteps/secondStep'
 export default function SignUp() {
+  interface IUserFirstStepData {
+    email: string
+    registrationNumber: string
+    studentID: number
+  }
+
+  const defaultUser: IUserFirstStepData = {
+    email: '',
+    registrationNumber: '',
+    studentID: 0,
+  }
+
   const [step, setStep] = useState<'step-1' | 'step-2' | 'step-3'>('step-1')
   const [userExists, setUserExists] = useState<boolean>(false)
+  const [user, setUser] = useState<IUserFirstStepData>(defaultUser)
 
   const changeStep = (step: 'step-1' | 'step-2' | 'step-3') => {
     switch (step) {
@@ -25,6 +38,10 @@ export default function SignUp() {
     // setUserExists(exists)
     setUserExists(false)
     setStep('step-2')
+  }
+
+  const handleUserFirstStepData = (user: IUserFirstStepData) => {
+    setUser(user)
   }
 
   return (
@@ -47,9 +64,13 @@ export default function SignUp() {
               <SignUpFirstStep
                 checkIfUserExists={checkIfUserExists}
                 changeStep={changeStep}
+                handleUserFirstStepData={handleUserFirstStepData}
               />
             ) : step === 'step-2' ? (
-              <SignUpSecondStep changeStep={changeStep} />
+              <SignUpSecondStep
+                changeStep={changeStep}
+                userFirstStepData={user}
+              />
             ) : (
               <>
                 <div className="flex flex-col items-center text-center">

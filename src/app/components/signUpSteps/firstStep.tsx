@@ -7,14 +7,22 @@ import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+interface IUserFirstStepData {
+  email: string
+  registrationNumber: string
+  studentID: number
+}
+
 interface IFirstStepProps {
   checkIfUserExists: (exists: boolean) => void
   changeStep: (step: 'step-1' | 'step-2' | 'step-3') => void
+  handleUserFirstStepData: (user: IUserFirstStepData) => void
 }
 
 export default function SignUpFirstStep({
   checkIfUserExists,
   changeStep,
+  handleUserFirstStepData,
 }: IFirstStepProps) {
   const [userExists, setUserExists] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -31,12 +39,15 @@ export default function SignUpFirstStep({
 
   type TSignUpFirstStepData = z.infer<typeof signUpFormFirstStepSchema>
 
-  const [user, setUser] = useState<TSignUpFirstStepData | null>(null)
+  interface IUserFirstStepData extends TSignUpFirstStepData {
+    studentID: number
+  }
+
+  const [user, setUser] = useState<IUserFirstStepData | null>(null)
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TSignUpFirstStepData>({
     resolver: zodResolver(signUpFormFirstStepSchema),
@@ -51,12 +62,12 @@ export default function SignUpFirstStep({
     }
 
     verifyCredentials(userSignUpFirstStepData)
-
-    reset()
   }
 
   const verifyCredentials = async (userData: TSignUpFirstStepData) => {
     let response
+
+    setLoading(true)
 
     try {
       response = await fetch(
@@ -80,13 +91,26 @@ export default function SignUpFirstStep({
         const existentUser = {
           email: userData.email,
           registrationNumber: userData.registrationNumber,
+          studentID,
         }
+
         setUserExists(true)
         setUser(existentUser)
         setLoading(true)
         checkIfUserExists(true)
       } else {
         changeStep('step-1')
+
+        const partialUserData: IUserFirstStepData = {
+          email: userData.email,
+          registrationNumber: userData.registrationNumber,
+          studentID,
+        }
+
+        handleUserFirstStepData(partialUserData)
+
+        setUser(partialUserData)
+
         setLoading(false)
       }
 

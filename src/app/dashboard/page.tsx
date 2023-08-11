@@ -1,11 +1,20 @@
 'use client'
 
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { DashboardClassCard } from '../components/dashboardClassCard'
 import { DashboardClassesCard } from '../components/dashboardClassesCard'
 import { Header } from '../components/header'
 import { PeriodStatusCard } from '../components/periodStatusCard'
+import { auth } from '../api/firebase'
+import { getAdditionalUserInfo } from 'firebase/auth'
 
 export default function Dashboard() {
+  const user = auth.currentUser
+
+  const getStudentData = () => {
+    console.log(user)
+  }
+
   return (
     <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
       <Header />

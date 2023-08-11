@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem, Chip } from '@nextui-org/react'
-import { CheckCheck } from 'lucide-react'
+import { Check, CheckCheck } from 'lucide-react'
 
 export function DashboardClassesCard() {
   const itemClasses = {
@@ -18,26 +18,47 @@ export function DashboardClassesCard() {
         subtitle="4 day(s) per week, 4.50 hour(s) per day."
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="h-[92px] w-[2px] bg-primary"></div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
+              <div className="h-[92px] w-[2px] bg-primary"></div>
 
-            <div className="flex flex-col py-6">
-              <span className="text-md text-neutral-dark">Aug, 01</span>
-              <span className="text-sm text-neutral">Tuesday</span>
+              <div className="flex flex-col py-6">
+                <span className="text-md text-neutral-dark">Aug, 01</span>
+                <span className="text-sm text-neutral">Tuesday</span>
+              </div>
             </div>
+
+            <Chip
+              classNames={{
+                base: 'bg-information-light',
+                content: 'text-information font-semibold text-md',
+              }}
+              variant="flat"
+              radius="sm"
+              startContent={
+                <CheckCheck size={18} className="text-information" />
+              }
+            >
+              Present
+            </Chip>
           </div>
 
-          <Chip
-            classNames={{
-              base: 'bg-information-light',
-              content: 'text-information font-semibold text-md',
-            }}
-            variant="flat"
-            radius="sm"
-            startContent={<CheckCheck size={18} className="text-information" />}
-          >
-            Present
-          </Chip>
+          <div className="flex flex-col gap-2 items-end">
+            <span className="text-lg font-semibold text-primary">
+              Content Given
+            </span>
+
+            <div className="flex flex gap-2 items-center">
+              <div className="flex gap-2 items-center">
+                <Check size={20} className="text-primary" />
+                <span className="text-neutral-dark">Page 70</span>
+              </div>
+              <div className="flex gap-2 items-center">
+                <Check size={20} className="text-primary" />
+                <span className="text-neutral-dark">Test 5</span>
+              </div>
+            </div>
+          </div>
         </div>
       </AccordionItem>
     </Accordion>

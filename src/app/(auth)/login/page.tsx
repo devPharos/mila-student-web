@@ -5,18 +5,12 @@ import { Image, Input, Button } from '@nextui-org/react'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import logo from '../assets/logo.png'
+import logo from '../../assets/logo.svg'
 import Link from 'next/link'
 import * as dotenv from 'dotenv'
-import {
-  EmailAuthProvider,
-  browserSessionPersistence,
-  setPersistence,
-  signInWithEmailAndPassword,
-} from 'firebase/auth'
-import { auth } from '../api/firebase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { logIn } from '@/app/hooks/register'
 
 export default function Login() {
   dotenv.config()
@@ -48,50 +42,15 @@ export default function Login() {
 
   type TLoginFormData = z.infer<typeof loginFormSchema>
 
-  const handleLogin = (userData: TLoginFormData, data: any) => {
-    if (data.Sucesso) {
-      setPersistence(auth, browserSessionPersistence)
-        .then(() => {
-          return signInWithEmailAndPassword(
-            auth,
-            userData.email,
-            userData.password,
-          )
-            .then(() => {
-              setLoading(true)
-
-              EmailAuthProvider.credential(userData.email, userData.password)
-
-              router.push('/dashboard')
-            })
-            .catch((error) => {
-              const errorStatusCode = error.code
-              const errorMessage = error.message
-
-              console.log(errorStatusCode, errorMessage)
-
-              setLoading(false)
-              setCredentialError(true)
-            })
-        })
-        .catch((error) => {
-          const errorStatusCode = error.code
-          const errorMessage = error.message
-
-          console.log(errorStatusCode, errorMessage)
-        })
-    }
-  }
-
   const verifyUser = async (userData: TLoginFormData) => {
     let response
+
+    setLoading(true)
 
     try {
       response = await fetch(
         `${process.env.API_URL}/students/${userData.registrationNumber}/${userData.email}/`,
       )
-
-      setLoading(true)
     } catch (error) {
       setLoading(false)
 
@@ -101,7 +60,9 @@ export default function Login() {
     if (response?.ok) {
       const data = await response?.json()
 
-      handleLogin(userData, data)
+      if (data.Sucesso) {
+        logIn(userData, setCredentialError, setLoading)
+      }
     } else {
       setLoading(false)
       setCredentialError(true)
@@ -111,7 +72,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TLoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -127,8 +87,6 @@ export default function Login() {
     }
 
     verifyUser(userLoginData)
-
-    reset()
   }
 
   return (
