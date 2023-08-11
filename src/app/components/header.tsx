@@ -18,9 +18,10 @@ export function Header({ studentData }: IChildrenProps) {
         as={NextImage}
         src={logo.src}
         alt=""
-        width={60}
-        height={60}
+        width={70}
+        height={70}
         className="rounded-none"
+        priority
       />
 
       <Popover

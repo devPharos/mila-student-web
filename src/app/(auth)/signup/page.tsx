@@ -1,12 +1,12 @@
 'use client'
 
 import { Image } from '@nextui-org/react'
-import logo from '../assets/logo.png'
-import { Steps } from '../components/steps'
+import logo from '../../assets/logo.png'
+import { Steps } from '../../components/steps'
 import { useState } from 'react'
-import SignUpFirstStep from '../components/signUpSteps/firstStep'
+import SignUpFirstStep from '../../components/signUpSteps/firstStep'
 import Link from 'next/link'
-import SignUpSecondStep from '../components/signUpSteps/secondStep'
+import SignUpSecondStep from '../../components/signUpSteps/secondStep'
 export default function SignUp() {
   interface IUserFirstStepData {
     email: string
