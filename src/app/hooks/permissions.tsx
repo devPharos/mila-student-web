@@ -17,10 +17,10 @@ export function useVerifyPathPermission(
   const isPublic = Object.values(APP_ROUTES.public).includes(pathName)
 
   if (!isPublic && !user && !loading) {
-    router.replace('/login')
+    router.push('/login')
   }
 
   if (isPublic && user && !loading) {
-    router.replace('/dashboard')
+    router.push('/dashboard')
   }
 }
