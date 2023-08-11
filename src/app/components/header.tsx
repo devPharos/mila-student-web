@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@nextui-org/react'
-import logo from '../assets/header-logo.svg'
+import logo from '../assets/header-logo.png'
 import { ProfilePopoverContent } from './profilePopoverContent'
 import NextImage from 'next/image'
 import { IChildrenProps } from '../@types/dashboard'
@@ -18,10 +18,10 @@ export function Header({ studentData }: IChildrenProps) {
         as={NextImage}
         src={logo.src}
         alt=""
+        quality={100}
         width={70}
-        height={70}
+        height={32}
         className="rounded-none"
-        priority
       />
 
       <Popover
