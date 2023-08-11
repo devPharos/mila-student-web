@@ -128,7 +128,7 @@ const logIn = (
     })
 }
 
-function useRegister() {
+const useRegister = () => {
   const context = useContext(RegisterContext)
 
   return context

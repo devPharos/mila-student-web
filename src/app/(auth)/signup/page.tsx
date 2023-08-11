@@ -7,6 +7,7 @@ import { useState } from 'react'
 import SignUpFirstStep from '../../components/signUpSteps/firstStep'
 import Link from 'next/link'
 import SignUpSecondStep from '../../components/signUpSteps/secondStep'
+import SignUpThirdStep from '@/app/components/signUpSteps/thirdStep'
 export default function SignUp() {
   interface IUserFirstStepData {
     email: string
@@ -72,20 +73,7 @@ export default function SignUp() {
                 userFirstStepData={user}
               />
             ) : (
-              <>
-                <div className="flex flex-col items-center text-center">
-                  <span className="text-md font-semibold text-neutral-dark">
-                    One last step!
-                  </span>
-                  <span className="text-sm text-neutral">
-                    In a few moments you are going to receive a verification
-                    email.
-                  </span>
-                  <span className="text-sm text-neutral">
-                    Please click on the link to finish your registration process
-                  </span>
-                </div>
-              </>
+              <SignUpThirdStep user={user} />
             )}
           </div>
 

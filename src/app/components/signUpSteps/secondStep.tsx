@@ -2,12 +2,11 @@ import { auth } from '@/app/api/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { collection, getFirestore } from 'firebase/firestore'
+import { doc, getFirestore, updateDoc } from 'firebase/firestore'
 import { ArrowRight, Eye, EyeOff, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useCollection } from 'react-firebase-hooks/firestore'
 
 interface IUserFirstStepData {
   email: string
@@ -44,12 +43,9 @@ export default function SignUpSecondStep({
 
   type TSignUpSecondStepData = z.infer<typeof signUpFormSecondStepSchema>
 
-  const [user, setUser] = useState<TSignUpSecondStepData | null>(null)
-
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TSignUpSecondStepData>({
     resolver: zodResolver(signUpFormSecondStepSchema),
@@ -70,9 +66,37 @@ export default function SignUpSecondStep({
         auth,
         userSignUpSecondStepData.password,
         userSignUpSecondStepData.email,
-      ).then(() => {
-        console.log('')
-      })
+      )
+        .then(() => {
+          const db = getFirestore()
+
+          const docRef = doc(
+            db,
+            'Students',
+            userSignUpSecondStepData.registrationNumber,
+          )
+
+          updateDoc(docRef, {
+            type: 'Student',
+            email: userSignUpSecondStepData.email,
+            registration: userSignUpSecondStepData.studentID,
+            registrationNumber: userSignUpSecondStepData.registrationNumber,
+            imageUrl: null,
+            name: null,
+            level: null,
+            birthDate: null,
+            country: null,
+            createdAt: new Date(),
+          })
+
+          changeStep('step-2')
+        })
+        .catch((error) => {
+          const errorStatusCode = error.code
+          const errorMessage = error.message
+
+          console.log(errorStatusCode, errorMessage)
+        })
     } catch (error) {
       console.log(error)
     }
