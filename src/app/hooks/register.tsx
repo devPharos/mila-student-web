@@ -1,5 +1,7 @@
 import {
+  User,
   browserSessionPersistence,
+  onAuthStateChanged,
   setPersistence,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
@@ -8,20 +10,34 @@ import React, {
   useContext,
   SetStateAction,
   Dispatch,
+  useState,
+  useEffect,
 } from 'react'
 import { auth } from '../api/firebase'
 import { LoginFormData } from '../@types/forms'
+import {
+  collection,
+  getFirestore,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore'
+import { Student } from '../@types/dashboard'
 
-export const RegisterContext = createContext([])
+interface IRegisterContext {
+  student: Student
+  setStudent: React.Dispatch<React.SetStateAction<Student>>
+}
+
+export const RegisterContext = createContext<IRegisterContext>(undefined as any)
 
 function RegisterProvider({ children }: { children: React.ReactNode }) {
   const defaultStudent = {
     registrationNumber: null,
     email: null,
     registration: null,
-    pass: null,
-    pass_confirm: null,
     name: null,
+    lastName: null,
     level: null,
     imageUrl: null,
     schedule: null,
@@ -31,8 +47,51 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     emailVerified: false,
   }
 
+  const [student, setStudent] = useState<Student>(defaultStudent)
+
+  async function authStateChanged(user: User | null) {
+    if (user && user.email) {
+      const db = getFirestore()
+
+      const q = query(
+        collection(db, 'Students'),
+        where('email', '==', user.email),
+      )
+
+      onSnapshot(q, (snapshotQuery) => {
+        snapshotQuery.forEach((doc) => {
+          const newUser = doc.data()
+
+          setStudent({
+            ...student,
+            email: newUser.email,
+            lastName: newUser.lastName,
+            level: newUser.level,
+            name: newUser.name,
+            schedule: newUser.schedule,
+            birthDate: newUser.birthDate,
+            country: newUser.country,
+            registration: newUser.registration,
+            registrationNumber: newUser.registrationNumber,
+            imageUrl: newUser.imageUrl,
+          })
+        })
+      })
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = onAuthStateChanged(auth, (user) =>
+      authStateChanged(user),
+    )
+
+    return subscriber
+  }, [])
+
   return (
-    <RegisterContext.Provider value={[]}>{children}</RegisterContext.Provider>
+    <RegisterContext.Provider value={{ student, setStudent }}>
+      {children}
+    </RegisterContext.Provider>
   )
 }
 
