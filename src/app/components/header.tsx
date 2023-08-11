@@ -32,7 +32,7 @@ export function Header({ studentData }: IChildrenProps) {
         backdrop="opaque"
       >
         <PopoverTrigger>
-          <Button className="bg-transparent pr-4">
+          <Button className="bg-transparent pr-4 pl-0">
             <Avatar
               src={studentData.imageUrl ? studentData.imageUrl : undefined}
             />

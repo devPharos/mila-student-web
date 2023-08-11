@@ -14,7 +14,7 @@ export default function RootLayout({
   const [user, loading] = useAuthState(auth)
   useVerifyPathPermission(user, loading)
 
-  if (loading) {
+  if (loading || user) {
     return (
       <div className="grid grid-cols-2 min-h-screen">
         <div className="bg-primary"></div>

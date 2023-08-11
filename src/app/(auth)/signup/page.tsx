@@ -37,7 +37,6 @@ export default function SignUp() {
 
   const checkIfUserExists = (exists: boolean) => {
     setUserExists(exists)
-    setStep('step-2')
   }
 
   const handleUserFirstStepData = (user: IUserFirstStepData) => {
