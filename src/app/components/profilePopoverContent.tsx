@@ -2,57 +2,55 @@ import { Avatar, Divider, Button } from '@nextui-org/react'
 import { signOut } from 'firebase/auth'
 import { AtSign, Building, Backpack, CalendarClock, LogOut } from 'lucide-react'
 import { useQRCode } from 'next-qrcode'
-import { useRouter } from 'next/navigation'
 import { auth } from '../api/firebase'
+import { IChildrenProps } from '../@types/dashboard'
 
-export function ProfilePopoverContent() {
+export function ProfilePopoverContent({ studentData }: IChildrenProps) {
   const { Canvas } = useQRCode()
-  const router = useRouter()
 
   const logOut = () => {
     signOut(auth)
-
-    router.push('/login')
   }
-
-  // if (user && !loading) {
-  //   const db = getFirestore()
-  //   onSnapshot(
-  //     doc(db, 'Students', userData.registrationNumber),
-  //     { includeMetadataChanges: true },
-  //     (doc) => {
-  //       console.log(doc.data())
-  //     },
-  //   )
-  // }
 
   return (
     <div className="px-1 py-2 flex flex-col items-center justify-center gap-6">
       <div className="flex flex-col gap-1 items-center w-full">
-        <Avatar className="w-20 h-20" />
-        <span className="text-primary text-md">Daniel de Souza</span>
-        <h3 className="text-neutral text-sm">Student ID: ORL000611</h3>
+        <Avatar
+          className="w-20 h-20"
+          src={studentData.imageUrl ? studentData.imageUrl : undefined}
+        />
+        <span className="text-primary text-md">{studentData?.name}</span>
+        <h3 className="text-neutral text-sm">
+          Student ID: {studentData?.registrationNumber}
+        </h3>
       </div>
 
       <div className="flex flex-col w-ful gap-2">
         <div className="flex gap-2 text-neutral-dark">
           <AtSign strokeWidth={1.5} size={20} />
-          <span>dansouz1712@gmail.com</span>
+          <span>{studentData?.email}</span>
         </div>
 
         <div className="flex gap-2 w-full text-neutral-dark">
           <Building strokeWidth={1.5} size={20} />
-          <span>Orlando</span>
+          <span>
+            {' '}
+            {studentData?.registrationNumber?.substring(0, 3) === 'ORL'
+              ? 'Orlando'
+              : studentData?.registrationNumber?.substring(0, 3) === 'MIA'
+              ? 'Miami'
+              : ''}
+          </span>
         </div>
 
         <div className="flex gap-2 w-full text-neutral-dark">
           <Backpack strokeWidth={1.5} size={20} />
-          <span>MBE01</span>
+          <span>{studentData?.level?.toUpperCase()}</span>
         </div>
 
         <div className="flex gap-2 w-full text-neutral-dark">
           <CalendarClock strokeWidth={1.5} size={20} />
-          <span>Valid thru: Dec, 2023</span>
+          <span>Valid thru: Dec, {new Date().getFullYear()}</span>
         </div>
       </div>
 
@@ -66,9 +64,9 @@ export function ProfilePopoverContent() {
       </div>
 
       <Canvas
-        text={
-          'https://form.jotform.com/222696636785069?milaId=ORL000611-DANIEL'
-        }
+        text={`https://form.jotform.com/222696636785069?milaId=${
+          studentData.registrationNumber
+        }-${studentData.name?.toUpperCase()}`}
       />
 
       <Divider />

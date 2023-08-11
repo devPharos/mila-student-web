@@ -9,8 +9,9 @@ import {
 import logo from '../assets/header-logo.svg'
 import { ProfilePopoverContent } from './profilePopoverContent'
 import NextImage from 'next/image'
+import { IChildrenProps } from '../@types/dashboard'
 
-export function Header() {
+export function Header({ studentData }: IChildrenProps) {
   return (
     <div className="flex items-center justify-between gap-4 w-full py-4 px-10 border-1 border-neutral-light bg-white">
       <Image
@@ -31,14 +32,19 @@ export function Header() {
       >
         <PopoverTrigger>
           <Button className="bg-transparent pr-4">
-            <Avatar />
+            <Avatar
+              src={studentData.imageUrl ? studentData.imageUrl : undefined}
+            />
             <span className="text-sm">
-              Hello, <span className="font-semibold text-primary">Daniel</span>
+              Hello,{' '}
+              <span className="font-semibold text-primary">
+                {studentData.name}
+              </span>
             </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="text-neutral-dark">
-          <ProfilePopoverContent />
+          <ProfilePopoverContent studentData={studentData} />
         </PopoverContent>
       </Popover>
     </div>

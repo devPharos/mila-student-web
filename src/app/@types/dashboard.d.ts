@@ -12,3 +12,7 @@ export interface Student {
   currentGroup: string | null
   emailVerified: boolean
 }
+
+export interface IChildrenProps {
+  studentData: Student
+}
