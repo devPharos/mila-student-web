@@ -29,24 +29,26 @@ interface IRegisterContext {
   setStudent: React.Dispatch<React.SetStateAction<Student>>
 }
 
-export const RegisterContext = createContext<IRegisterContext>(undefined as any)
+const defaultStudent = {
+  registrationNumber: null,
+  email: null,
+  registration: null,
+  name: null,
+  lastName: null,
+  level: null,
+  imageUrl: null,
+  schedule: null,
+  birthDate: null,
+  country: null,
+  currentGroup: null,
+  emailVerified: false,
+}
+
+export const RegisterContext = createContext<IRegisterContext>(
+  defaultStudent as any,
+)
 
 function RegisterProvider({ children }: { children: React.ReactNode }) {
-  const defaultStudent = {
-    registrationNumber: null,
-    email: null,
-    registration: null,
-    name: null,
-    lastName: null,
-    level: null,
-    imageUrl: null,
-    schedule: null,
-    birthDate: null,
-    country: null,
-    currentGroup: null,
-    emailVerified: false,
-  }
-
   const [student, setStudent] = useState<Student>(defaultStudent)
 
   async function authStateChanged(user: User | null) {
