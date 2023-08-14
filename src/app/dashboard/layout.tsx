@@ -5,6 +5,7 @@ import { Spinner } from '@nextui-org/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../api/firebase'
 import { useVerifyPathPermission } from '../hooks/permissions'
+import DashboardLoading from '../components/dashboardLoading'
 
 export default function RootLayout({
   children,
@@ -15,11 +16,7 @@ export default function RootLayout({
   useVerifyPathPermission(user, loading)
 
   if (loading || !user) {
-    return (
-      <div className="bg-neutral-lighter flex flex-col items-center justify-center p-6 w-full  min-h-screen">
-        <Spinner label="Loading..." color="primary" labelColor="primary" />
-      </div>
-    )
+    return <DashboardLoading />
   }
 
   return <Providers>{children}</Providers>

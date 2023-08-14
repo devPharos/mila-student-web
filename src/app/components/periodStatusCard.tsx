@@ -1,5 +1,6 @@
 import { Card, CardHeader, Chip } from '@nextui-org/react'
 import { CalendarCheck, CalendarX } from 'lucide-react'
+import { useRegister } from '../hooks/register'
 
 interface IPeriodStatusCard {
   type: 'absence' | 'frequency'
@@ -38,6 +39,15 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
           radius="sm"
         >
           {value}
+          <span
+            className={
+              type === 'absence'
+                ? 'hidden'
+                : 'text-information font-semibold text-md'
+            }
+          >
+            %
+          </span>
         </Chip>
       </CardHeader>
     </Card>
