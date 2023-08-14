@@ -90,11 +90,11 @@ export default function Login() {
   }
 
   return (
-    <div className="grid grid-cols-2 min-h-screen">
-      <div className="bg-primary"></div>
+    <div className="min-h-screen">
+      {/* <div className="bg-primary"></div> */}
       <form
         action=""
-        className="bg-neutral-lighter flex flex-col items-center justify-center p-6 w-full"
+        className="bg-neutral-lighter flex flex-col min-h-screen items-center justify-center p-6 w-full"
         onSubmit={handleSubmit(handleLoginSubmit)}
       >
         <div className="max-w-sm w-full flex flex-col items-center gap-14">

@@ -32,10 +32,7 @@ export function DashboardClassesCard() {
       >
         {group?.classes.map((value: StudentClass, index: number) => {
           return (
-            <div
-              className="flex items-center justify-between"
-              key={value.classDate}
-            >
+            <div className="flex items-center justify-between" key={index}>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-4">
                   <div className="h-[92px] w-[2px] bg-primary"></div>
@@ -113,9 +110,9 @@ export function DashboardClassesCard() {
                 </span>
 
                 <div className="flex gap-2 items-center">
-                  {value.program.map((value) => {
+                  {value.program.map((value, index) => {
                     return (
-                      <div className="flex gap-2 items-center">
+                      <div className="flex gap-2 items-center" key={index}>
                         <Check size={20} className="text-primary" />
                         <span className="text-neutral-dark">
                           {CapitalizeWord(value.description)}

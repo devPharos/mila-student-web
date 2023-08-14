@@ -93,13 +93,13 @@ export function DashboardClassCard() {
               />
             </div>
 
-            {group?.status === 'ONGOING' ? (
+            {group?.status === 'FINISHED' ? (
               <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
-                In progress
+                Finished
               </span>
             ) : (
               <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
-                Completed
+                In progress
               </span>
             )}
           </div>
