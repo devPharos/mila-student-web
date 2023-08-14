@@ -1,11 +1,10 @@
 'use client'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import Dashboard from './dashboard/page'
-import Login from './(auth)/login/page'
 import { auth } from './api/firebase'
+import { useVerifyPathPermission } from './hooks/permissions'
 
 export default function Home() {
   const [user, loading] = useAuthState(auth)
 
-  return <>{!loading && user ? <Dashboard /> : <Login />}</>
+  useVerifyPathPermission(user, loading)
 }
