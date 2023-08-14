@@ -6,8 +6,12 @@ import {
   CircularProgress,
 } from '@nextui-org/react'
 import { Backpack } from 'lucide-react'
+import { useRegister } from '../hooks/register'
+import { format, parseISO } from 'date-fns'
 
 export function DashboardClassCard() {
+  const { group } = useRegister()
+
   return (
     <Card
       shadow="none"
@@ -20,27 +24,43 @@ export function DashboardClassCard() {
       <CardHeader>
         <div className="flex gap-2">
           <Backpack size={20} className="text-primary" />
-          <span className="font-semibold">Class Mbe01</span>
+          <span className="font-semibold">Class {group?.level}</span>
         </div>
 
         <div className="flex gap-4 flex-wrap align-left">
           <span className="text-sm text-neutral">
+            <span className="text-neutral-dark font-semibold">Name: </span>
+            {group?.name}
+          </span>
+
+          <span className="text-sm text-neutral">
             <span className="text-neutral-dark font-semibold">Teacher: </span>
-            Jeaneth Chirinos
+            {group?.teacher}
           </span>
 
           <span className="text-sm text-neutral">
             <span className="text-neutral-dark font-semibold">
               Class SD/ED:{' '}
             </span>
-            Feb 21st, 2022 to Jun 21st, 2022
+            {format(parseISO(group?.groupStartDate || ''), 'MMM do, yyyy')} to{' '}
+            {format(parseISO(group?.groupEndDate || ''), 'MMM do, yyyy')}
           </span>
 
           <span className="text-sm text-neutral">
             <span className="text-neutral-dark font-semibold">
               Student SD/EN:{' '}
             </span>
-            Mar 7th, 2022 to Jun 21st, 2022
+            {format(parseISO(group?.studentStartDate || ''), 'MMM do, yyyy')}{' '}
+            <span
+              className={
+                group?.studentEndDate ? 'text-sm text-neutral' : 'hidden'
+              }
+            >
+              to{' '}
+            </span>
+            {group?.studentEndDate
+              ? format(parseISO(group?.studentEndDate || ''), 'MMM do, yyyy')
+              : ''}
           </span>
         </div>
       </CardHeader>
@@ -51,7 +71,7 @@ export function DashboardClassCard() {
             <CircularProgress
               aria-label="Loading..."
               size="lg"
-              value={75}
+              value={group?.givenClassPercentage}
               classNames={{
                 svg: 'w-[125px] h-[125px] ',
                 indicator: 'stroke-primary',
@@ -63,7 +83,7 @@ export function DashboardClassCard() {
               <CircularProgress
                 aria-label="Loading..."
                 size="lg"
-                value={72}
+                value={group?.givenContentPercentage}
                 classNames={{
                   svg: 'w-[100px] h-[100px] ',
                   indicator: 'stroke-error',
@@ -73,36 +93,52 @@ export function DashboardClassCard() {
               />
             </div>
 
-            <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
-              In progress
-            </span>
+            {group?.status === 'ONGOING' ? (
+              <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
+                In progress
+              </span>
+            ) : (
+              <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
+                Completed
+              </span>
+            )}
           </div>
 
           <div className="flex flex-col gap-6">
             <div className="flex gap-4">
               <div className="flex gap-2 items-center">
                 <div className="w-[20px] h-[20px] bg-secondary rounded-[4px]"></div>
-                <span className="text-error">72% Content given</span>
+                <span className="text-error">
+                  {group?.givenContentPercentage}% Content given
+                </span>
               </div>
 
               <div className="flex gap-2 items-center">
                 <div className="w-[20px] h-[20px] bg-primary rounded-[4px]"></div>
-                <span className="text-primary">72% Content given</span>
+                <span className="text-primary">
+                  {group?.givenClassPercentage}% Class given
+                </span>
               </div>
             </div>
 
             <div className="flex items-center w-full justify-between gap-2">
               <span className="text-neutral-dark">Final average grade</span>
-              <Chip
-                classNames={{
-                  base: 'bg-neutral-lighter',
-                  content: 'text-neutral font-semibold text-md',
-                }}
-                variant="flat"
-                radius="sm"
-              >
-                In progress...
-              </Chip>
+              {group?.finalAverageGrade !== 0 ? (
+                <span className="text-information font-semibold">
+                  {group?.finalAverageGrade}
+                </span>
+              ) : (
+                <Chip
+                  classNames={{
+                    base: 'bg-neutral-lighter',
+                    content: 'text-neutral font-semibold text-md',
+                  }}
+                  variant="flat"
+                  radius="sm"
+                >
+                  In progress...
+                </Chip>
+              )}
             </div>
           </div>
         </div>

@@ -15,8 +15,6 @@ import { format, parseISO } from 'date-fns'
 export function DashboardClassesCard() {
   const { group } = useRegister()
 
-  console.log(group?.classes)
-
   const itemClasses = {
     base: 'w-full bg-white p-4 rounded-[24px]',
     title: 'font-md font-semibold text-primary',
