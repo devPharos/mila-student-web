@@ -1,14 +1,15 @@
 import { Avatar, Divider, Button, Input } from '@nextui-org/react'
 import { signOut } from 'firebase/auth'
 import { AtSign, Building, Backpack, CalendarClock, LogOut } from 'lucide-react'
-import { useQRCode } from 'next-qrcode'
+
 import { auth } from '../api/firebase'
 import { IChildrenProps } from '../@types/dashboard'
 import { ChangeEventHandler, useRef, useState } from 'react'
 import { useRegister } from '../hooks/register'
+import QrCodeWithLogo from 'qrcode-with-logos'
+import { Canvas } from './canvas'
 
 export function ProfilePopoverContent({ studentData }: IChildrenProps) {
-  const { Canvas } = useQRCode()
   const [image, setImage] = useState<File | null>(null)
   const [imageURL, setImageURL] = useState<string>('')
   const hiddenFileInput = useRef<any>(null)
@@ -18,7 +19,7 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
     signOut(auth)
   }
 
-  const updateProfileImage = async (event: Event) => {
+  const updateProfileImage = (event: Event) => {
     const files = (event.target as HTMLInputElement).files
 
     if (files && files[0]) {
@@ -27,19 +28,13 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
       setImage(img)
       setImageURL(URL.createObjectURL(img))
 
-      console.log('0')
-      console.log(student)
-      console.log(imageURL)
-
       if (imageURL && student.registrationNumber && student.email) {
-        console.log('1')
-        await updateProfilePic(
+        updateProfilePic(
           imageURL,
           student.registrationNumber,
           student.email,
+          img,
         )
-
-        console.log('2')
       }
     }
   }
@@ -113,12 +108,14 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
           Scan this code at the locations that requires your MILA ID
         </span>
       </div>
-
+      {/* 
       <Canvas
         text={`https://form.jotform.com/222696636785069?milaId=${
           studentData.registrationNumber
         }-${studentData.name?.toUpperCase()}`}
-      />
+      /> */}
+
+      <Canvas />
 
       <Divider />
 

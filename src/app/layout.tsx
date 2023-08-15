@@ -18,7 +18,7 @@ const myriadPro = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Student Dashboard',
+  title: 'Student Dashboard | MILA',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
