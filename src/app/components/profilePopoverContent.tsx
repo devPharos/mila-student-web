@@ -1,24 +1,75 @@
-import { Avatar, Divider, Button } from '@nextui-org/react'
+import { Avatar, Divider, Button, Input } from '@nextui-org/react'
 import { signOut } from 'firebase/auth'
 import { AtSign, Building, Backpack, CalendarClock, LogOut } from 'lucide-react'
 import { useQRCode } from 'next-qrcode'
 import { auth } from '../api/firebase'
 import { IChildrenProps } from '../@types/dashboard'
+import { ChangeEventHandler, useRef, useState } from 'react'
+import { useRegister } from '../hooks/register'
 
 export function ProfilePopoverContent({ studentData }: IChildrenProps) {
   const { Canvas } = useQRCode()
+  const [image, setImage] = useState<File | null>(null)
+  const [imageURL, setImageURL] = useState<string>('')
+  const hiddenFileInput = useRef<any>(null)
+  const { student, updateProfilePic } = useRegister()
 
   const logOut = () => {
     signOut(auth)
   }
 
+  const updateProfileImage = async (event: Event) => {
+    const files = (event.target as HTMLInputElement).files
+
+    if (files && files[0]) {
+      const img: File = files[0]
+
+      setImage(img)
+      setImageURL(URL.createObjectURL(img))
+
+      console.log('0')
+      console.log(student)
+      console.log(imageURL)
+
+      if (imageURL && student.registrationNumber && student.email) {
+        console.log('1')
+        await updateProfilePic(
+          imageURL,
+          student.registrationNumber,
+          student.email,
+        )
+
+        console.log('2')
+      }
+    }
+  }
+
+  const handleClick = () => {
+    hiddenFileInput?.current?.click()
+  }
+
   return (
     <div className="px-1 py-2 flex flex-col items-center justify-center gap-6">
       <div className="flex flex-col gap-1 items-center w-full">
-        <Avatar
-          className="w-20 h-20"
-          src={studentData.imageUrl ? studentData.imageUrl : undefined}
-        />
+        <Button
+          onClick={handleClick}
+          className="bg-transparent w-20 h-20 p-0 rounded-full"
+        >
+          <Avatar
+            className="w-20 h-20"
+            src={imageURL || student.imageUrl || undefined}
+          />
+
+          <Input
+            type="file"
+            ref={hiddenFileInput}
+            onChange={updateProfileImage}
+            classNames={{
+              base: ['hidden'],
+            }}
+          />
+        </Button>
+
         <span className="text-primary text-md">{studentData?.name}</span>
         <h3 className="text-neutral text-sm">
           Student ID: {studentData?.registrationNumber}

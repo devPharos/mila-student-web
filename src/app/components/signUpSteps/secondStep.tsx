@@ -2,7 +2,7 @@ import { auth } from '@/app/api/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, getFirestore, updateDoc } from 'firebase/firestore'
+import { doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore'
 import { ArrowRight, Eye, EyeOff, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -64,8 +64,8 @@ export default function SignUpSecondStep({
     try {
       createUserWithEmailAndPassword(
         auth,
-        userSignUpSecondStepData.password,
         userSignUpSecondStepData.email,
+        userSignUpSecondStepData.password,
       )
         .then(() => {
           const db = getFirestore()
@@ -76,7 +76,7 @@ export default function SignUpSecondStep({
             userSignUpSecondStepData.registrationNumber,
           )
 
-          updateDoc(docRef, {
+          setDoc(docRef, {
             type: 'Student',
             email: userSignUpSecondStepData.email,
             registration: userSignUpSecondStepData.studentID,
@@ -87,9 +87,9 @@ export default function SignUpSecondStep({
             birthDate: null,
             country: null,
             createdAt: new Date(),
+          }).then(() => {
+            changeStep('step-2')
           })
-
-          changeStep('step-2')
         })
         .catch((error) => {
           const errorStatusCode = error.code

@@ -16,10 +16,13 @@ import React, {
 import { auth } from '../api/firebase'
 import { LoginFormData } from '../@types/forms'
 import {
+  DocumentData,
   collection,
+  doc,
   getFirestore,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore'
 import {
@@ -29,6 +32,8 @@ import {
   StudentGroup,
   StudentPeriod,
 } from '../@types/dashboard'
+import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage'
+import CapitalizeWord from '../functions/auxiliar'
 
 interface IRegisterContext {
   student: Student
@@ -42,11 +47,16 @@ interface IRegisterContext {
   setGroup: React.Dispatch<React.SetStateAction<StudentGroup | null>>
   groups: StudentGroup[]
   frequency: StudentFrequency[]
+  updateProfilePic: (
+    url: string,
+    registrationNumber: string,
+    email: string,
+  ) => void
   updateDashboard: (data: any) => void
 }
 
 const defaultStudent = {
-  registrationNumber: null,
+  registrationNumber: '',
   email: null,
   registration: null,
   name: null,
@@ -139,6 +149,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
       onSnapshot(q, (snapshotQuery) => {
         snapshotQuery.forEach(async (doc) => {
           const newUser = doc.data()
+          await getStudentData(newUser)
 
           setStudent({
             ...student,
@@ -160,6 +171,82 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  async function getStudentData(user: DocumentData) {
+    try {
+      const response = await fetch(
+        `${process.env.API_URL}/students/${user.registration}`,
+      )
+      const data = await response.json()
+
+      let lastName = ''
+
+      const lastNameArr: string[] = data.data.lastName.split(' ')
+
+      lastNameArr.forEach((value: string, index: number) => {
+        if (lastName.trim() !== '') {
+          lastName += ' '
+        }
+
+        if (lastNameArr[index].length > 3) {
+          lastName += CapitalizeWord(lastNameArr[index])
+        } else {
+          lastName += lastNameArr[index]
+        }
+      })
+
+      if (
+        user.nsevis !== data.data.nsevis ||
+        user.level !== CapitalizeWord(data.data.currentGroup.level) ||
+        user.schedule !== CapitalizeWord(data.data.currentGroup.schedule) ||
+        user.name !== CapitalizeWord(data.data.name) ||
+        user.lastName !== lastName
+      ) {
+        const db = getFirestore()
+
+        const docRef = doc(db, 'Students', user?.registrationNumber)
+
+        updateDoc(docRef, {
+          type: 'Student',
+          name: CapitalizeWord(data.data.name),
+          lastName,
+          level: CapitalizeWord(data.data.currentGroup.level),
+          schedule: CapitalizeWord(data.data.currentGroup.schedule),
+          birthDate: data.data.birthDate,
+          country: data.data.country,
+          nsevis: data.data.nsevis,
+        })
+      }
+    } catch (err) {
+      // console.log('Error!', err)
+    }
+  }
+
+  async function updateProfilePic(
+    url: string,
+    registrationNumber: string,
+    email: string,
+  ) {
+    const storage = getStorage()
+
+    const storageRef = ref(storage, 'profile_' + registrationNumber)
+    const db = getFirestore()
+    uploadString(storageRef, url)
+
+    const finalUrl = await getDownloadURL(storageRef)
+
+    const docRef = doc(db, 'Students', registrationNumber)
+
+    const q = query(collection(db, 'Students'), where('email', '==', email))
+
+    onSnapshot(q, (snapshotQuery) => {
+      snapshotQuery.forEach(() => {
+        updateDoc(docRef, {
+          imageUrl: finalUrl,
+        })
+      })
+    })
+  }
+
   useEffect(() => {
     const subscriber = onAuthStateChanged(auth, (user) =>
       authStateChanged(user),
@@ -172,6 +259,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     <RegisterContext.Provider
       value={{
         updateDashboard,
+        updateProfilePic,
         student,
         setStudent,
         dashboard,

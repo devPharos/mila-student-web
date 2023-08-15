@@ -113,7 +113,7 @@ export function DashboardClassesCard() {
                       )
                     }
                   >
-                    Present
+                    {value.presenceStatus}
                   </Chip>
                 </div>
               </div>

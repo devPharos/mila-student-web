@@ -1,5 +1,5 @@
 export interface Student {
-  registrationNumber: string | null
+  registrationNumber: string
   email: string | null
   registration: string | null
   name: string | null
@@ -11,6 +11,7 @@ export interface Student {
   country: string | null
   currentGroup: string | null
   emailVerified: boolean
+  nsevis?: any
 }
 
 export interface Dashboard {

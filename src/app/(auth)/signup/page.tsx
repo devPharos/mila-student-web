@@ -7,7 +7,6 @@ import { useState } from 'react'
 import SignUpFirstStep from '../../components/signUpSteps/firstStep'
 import Link from 'next/link'
 import SignUpSecondStep from '../../components/signUpSteps/secondStep'
-import SignUpThirdStep from '@/app/components/signUpSteps/thirdStep'
 export default function SignUp() {
   interface IUserFirstStepData {
     email: string
@@ -65,13 +64,11 @@ export default function SignUp() {
                 changeStep={changeStep}
                 handleUserFirstStepData={handleUserFirstStepData}
               />
-            ) : step === 'step-2' ? (
+            ) : (
               <SignUpSecondStep
                 changeStep={changeStep}
                 userFirstStepData={user}
               />
-            ) : (
-              <SignUpThirdStep user={user} />
             )}
           </div>
 
