@@ -13,7 +13,7 @@ import { IChildrenProps } from '../@types/dashboard'
 
 export function Header({ studentData }: IChildrenProps) {
   return (
-    <div className="flex items-center justify-between gap-4 w-full py-4 px-10 border-1 border-neutral-light bg-white">
+    <div className="flex items-center justify-between gap-4 w-full py-4 px-10 bg-white">
       <Image
         as={NextImage}
         src={logo.src}
