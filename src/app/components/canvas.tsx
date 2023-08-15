@@ -7,7 +7,7 @@ const useCanvas = (callback: any) => {
   useEffect(() => {
     const canvas: any = canvasRef.current
     const ctx: any = canvas?.getContext('2d')
-    callback([canvas, ctx])
+    // callback([canvas, ctx])
   }, [])
 
   return canvasRef

@@ -58,7 +58,7 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
           <Input
             type="file"
             ref={hiddenFileInput}
-            onChange={updateProfileImage}
+            // onChange={updateProfileImage}
             classNames={{
               base: ['hidden'],
             }}
