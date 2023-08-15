@@ -32,7 +32,13 @@ import {
   StudentGroup,
   StudentPeriod,
 } from '../@types/dashboard'
-import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage'
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadString,
+} from 'firebase/storage'
 import CapitalizeWord from '../functions/auxiliar'
 
 interface IRegisterContext {
@@ -47,10 +53,12 @@ interface IRegisterContext {
   setGroup: React.Dispatch<React.SetStateAction<StudentGroup | null>>
   groups: StudentGroup[]
   frequency: StudentFrequency[]
+  params: { maxAbsenses: number; contactEmail: string }
   updateProfilePic: (
     url: string,
     registrationNumber: string,
     email: string,
+    file: Blob,
   ) => void
   updateDashboard: (data: any) => void
 }
@@ -79,6 +87,13 @@ export const RegisterContext = createContext<IRegisterContext>(
 function RegisterProvider({ children }: { children: React.ReactNode }) {
   const [student, setStudent] = useState<Student>(defaultStudent)
   const [dashboard, setDashboard] = useState<Dashboard>(defaultDashboard)
+  const [params, setParams] = useState<{
+    maxAbsenses: number
+    contactEmail: string
+  }>({
+    maxAbsenses: 0,
+    contactEmail: '',
+  })
 
   const [period, setPeriod] = useState<StudentPeriod | null>(null)
   const [periods, setPeriods] = useState<StudentPeriod[]>([])
@@ -145,6 +160,13 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
         collection(db, 'Students'),
         where('email', '==', user.email),
       )
+
+      onSnapshot(query(collection(db, 'Params')), (snapshotQuery) => {
+        snapshotQuery.forEach(async (doc) => {
+          const data = doc.data()
+          setParams({ ...params, ...data })
+        })
+      })
 
       onSnapshot(q, (snapshotQuery) => {
         snapshotQuery.forEach(async (doc) => {
@@ -225,6 +247,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     url: string,
     registrationNumber: string,
     email: string,
+    file: Blob,
   ) {
     const storage = getStorage()
 
@@ -238,13 +261,20 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
     const q = query(collection(db, 'Students'), where('email', '==', email))
 
-    onSnapshot(q, (snapshotQuery) => {
-      snapshotQuery.forEach(() => {
-        updateDoc(docRef, {
-          imageUrl: finalUrl,
+    uploadBytes(storageRef, file)
+      .then(() => {
+        console.log('teste 1')
+        onSnapshot(q, (snapshotQuery) => {
+          snapshotQuery.forEach(() => {
+            updateDoc(docRef, {
+              imageUrl: finalUrl,
+            })
+          })
         })
       })
-    })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   useEffect(() => {
@@ -271,6 +301,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
         groups,
         periodDate,
         periodDates,
+        params,
       }}
     >
       {children}

@@ -9,11 +9,20 @@ import { useRegister } from '../hooks/register'
 import { isAfter, isBefore, parseISO } from 'date-fns'
 import { StudentGroup } from '../@types/dashboard'
 import DashboardLoading from '../components/dashboardLoading'
+import Link from 'next/link'
 
 export default function Dashboard() {
   const [initializing, setInitializing] = useState(true)
-  const { student, group, groups, periods, periodDate, setGroup, frequency } =
-    useRegister()
+  const {
+    student,
+    group,
+    groups,
+    periods,
+    periodDate,
+    setGroup,
+    frequency,
+    params,
+  } = useRegister()
   const [totalAbsenses, setTotalAbsenses] = useState(0)
 
   useEffect(() => {
@@ -89,27 +98,51 @@ export default function Dashboard() {
     <>
       {initializing ? (
         <DashboardLoading />
-      ) : (
-        <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
-          <Header studentData={student} />
+      ) : frequency[frequency.length - 1].percFrequency < 80 ? (
+        <>
+          <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
+            <Header studentData={student} />
 
-          <div className="flex flex-col gap-4 max-w-[1120px] w-full px-6 py-10">
-            <div className="grid grid-cols-2 gap-4">
-              <PeriodStatusCard
-                type="absence"
-                value={group?.totalAbsences || 0}
-              />
-              <PeriodStatusCard
-                type="frequency"
-                value={frequency[frequency.length - 1].percFrequency || 0}
-              />
+            <div className="bg-neutral-lighter flex justify-center items-center flex-col p-24">
+              <span className="text-lg text-neutral-dark">Dear student, </span>
+              <span className="text-neutral-dark">
+                Please send an e-mail to
+              </span>
+
+              <Link
+                className="font-semibold text-neutral-dark"
+                href={`mailto:${params.contactEmail}?subject=Student Dashboard`}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {params.contactEmail}
+              </Link>
             </div>
-
-            <DashboardClassCard />
-
-            <DashboardClassesCard />
           </div>
-        </div>
+        </>
+      ) : (
+        <>
+          <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
+            <Header studentData={student} />
+
+            <div className="flex flex-col gap-4 max-w-[1120px] w-full px-6 py-10">
+              <div className="grid grid-cols-2 gap-4">
+                <PeriodStatusCard
+                  type="absence"
+                  value={group?.totalAbsences || 0}
+                />
+                <PeriodStatusCard
+                  type="frequency"
+                  value={frequency[frequency.length - 1].percFrequency || 0}
+                />
+              </div>
+
+              <DashboardClassCard />
+
+              <DashboardClassesCard />
+            </div>
+          </div>
+        </>
       )}
     </>
   )
