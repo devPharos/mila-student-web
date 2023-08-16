@@ -44,7 +44,6 @@ export default function SignUp() {
 
   return (
     <div className="gmin-h-screen">
-      {/* <div className="bg-primary"></div> */}
       <div className="bg-neutral-lighter min-h-screen flex flex-col items-center justify-center p-6">
         <div className="max-w-sm w-full flex flex-col items-center gap-14">
           <Steps step={step} />

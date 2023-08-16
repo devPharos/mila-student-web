@@ -16,7 +16,7 @@ export function useVerifyPathPermission(
 
   const isPublic = Object.values(APP_ROUTES.public).includes(pathName)
 
-  const isHome = pathName === '/' ? true : false
+  const isHome = pathName === '/'
 
   if (!isPublic && !user && !loading) {
     router.push('/login')
