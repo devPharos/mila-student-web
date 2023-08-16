@@ -51,7 +51,8 @@ export default function SignUp() {
           <Image
             width={130}
             src={logo.src}
-            alt=""
+            alt="Mila logo"
+            title="Mila logo"
             loading="lazy"
             className="rounded-none"
           />

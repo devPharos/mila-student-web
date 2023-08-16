@@ -98,7 +98,8 @@ export default function Login() {
           <Image
             width={130}
             src={logo.src}
-            alt=""
+            alt="Mila logo"
+            title="Mila logo"
             loading="lazy"
             radius="none"
           />

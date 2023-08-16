@@ -15,7 +15,13 @@ export function ClassPeriodCard() {
           'font-semibold max-sm:font-normal',
           'justify-center',
         ],
-        base: ['rounded-[24px]', 'p-4'],
+        base: [
+          'rounded-[24px]',
+          'max-sm:rounded-[16px]',
+          'py-4',
+          'max-sm:py-2',
+          'px-4',
+        ],
       }}
     >
       <CardHeader>

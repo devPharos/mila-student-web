@@ -18,7 +18,8 @@ export function Header({ studentData }: IChildrenProps) {
       <Image
         as={NextImage}
         src={logo.src}
-        alt=""
+        alt="Mila logo"
+        title="Mila logo"
         quality={100}
         width={70}
         height={32}

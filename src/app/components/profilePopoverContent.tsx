@@ -83,7 +83,8 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
           <Image
             as={NextImage}
             src={logo.src}
-            alt=""
+            alt="Mila logo"
+            title="Mila logo"
             quality={100}
             width={30}
             height={32}
