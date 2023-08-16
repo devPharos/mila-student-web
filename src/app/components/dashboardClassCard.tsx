@@ -8,6 +8,7 @@ import {
 import { Backpack } from 'lucide-react'
 import { useRegister } from '../hooks/register'
 import { format, parseISO } from 'date-fns'
+import CapitalizeWord from '../functions/auxiliar'
 
 export function DashboardClassCard() {
   const { group } = useRegister()
@@ -28,32 +29,25 @@ export function DashboardClassCard() {
       <CardHeader>
         <div className="flex gap-2">
           <Backpack size={20} className="text-primary" />
-          <span className="font-semibold">Class {group?.level}</span>
+          <span className="font-semibold">
+            Class {group?.level} - Teacher{' '}
+            {CapitalizeWord(group?.teacher || '')}
+          </span>
         </div>
 
-        <div className="flex gap-4 flex-wrap align-left max-sm:gap-2">
+        <div className="flex flex-col justify-center items-start">
           <span className="text-sm text-neutral max-sm:text-xs">
-            <span className="text-neutral-dark font-semibold">Name: </span>
-            {group?.name}
+            {group?.groupID} - {group?.name}
           </span>
 
           <span className="text-sm text-neutral max-sm:text-xs">
-            <span className="text-neutral-dark font-semibold">Teacher: </span>
-            {group?.teacher}
-          </span>
-
-          <span className="text-sm text-neutral max-sm:text-xs">
-            <span className="text-neutral-dark font-semibold">
-              Class SD/ED:{' '}
-            </span>
+            Class SD/ED:{' '}
             {format(parseISO(group?.groupStartDate || ''), 'MMM do, yyyy')} to{' '}
             {format(parseISO(group?.groupEndDate || ''), 'MMM do, yyyy')}
           </span>
 
           <span className="text-sm text-neutral max-sm:text-xs">
-            <span className="text-neutral-dark font-semibold ">
-              Student SD/EN:{' '}
-            </span>
+            Student SD/EN:{' '}
             {format(parseISO(group?.studentStartDate || ''), 'MMM do, yyyy')}{' '}
             <span
               className={
@@ -70,58 +64,60 @@ export function DashboardClassCard() {
       </CardHeader>
 
       <CardBody>
-        <div className="max-w-[600px] w-full flex flex-wrap max-sm:justify-center max-sm: gap-2 items-center justify-between py-6 px-4">
-          <div className="relative">
-            <CircularProgress
-              aria-label="Loading..."
-              size="lg"
-              value={group?.givenClassPercentage}
-              classNames={{
-                svg: 'w-[125px] h-[125px] ',
-                indicator: 'stroke-primary',
-                track: 'stroke-information-light',
-              }}
-            />
+        <div className="flex flex-col gap-6">
+          <div className="w-full flex flex-col max-sm:justify-center max-sm: gap-2 items-center justify-between py-6 px-4">
+            <div className="w-full flex flex-row justify-center items-center gap-4">
+              <div className="relative">
+                <CircularProgress
+                  aria-label="Loading..."
+                  size="lg"
+                  value={group?.givenClassPercentage}
+                  classNames={{
+                    svg: 'w-[125px] h-[125px] ',
+                    indicator: 'stroke-primary',
+                    track: 'stroke-information-light',
+                  }}
+                />
 
-            <div className="absolute top-[13px] left-[13px]">
-              <CircularProgress
-                aria-label="Loading..."
-                size="lg"
-                value={group?.givenContentPercentage}
-                classNames={{
-                  svg: 'w-[100px] h-[100px] ',
-                  indicator: 'stroke-error',
-                  track: 'stroke-error-light',
-                  value: 'text-md text-neutral-dark',
-                }}
-              />
-            </div>
+                <div className="absolute top-[13px] left-[13px]">
+                  <CircularProgress
+                    aria-label="Loading..."
+                    size="lg"
+                    value={group?.givenContentPercentage}
+                    classNames={{
+                      svg: 'w-[100px] h-[100px] ',
+                      indicator: 'stroke-error',
+                      track: 'stroke-error-light',
+                      value: 'text-md text-neutral-dark',
+                    }}
+                  />
+                </div>
 
-            {group?.status === 'FINISHED' ? (
-              <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
-                Finished
-              </span>
-            ) : (
-              <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
-                In progress
-              </span>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <div className="flex gap-4">
-              <div className="flex gap-2 items-center">
-                <div className="w-[20px] h-[20px] bg-secondary rounded-[4px] max-sm:hidden"></div>
-                <span className="text-error max-sm:text-sm">
-                  {group?.givenContentPercentage}% Content given
-                </span>
+                {group?.status === 'FINISHED' ? (
+                  <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
+                    Finished
+                  </span>
+                ) : (
+                  <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
+                    In progress
+                  </span>
+                )}
               </div>
 
-              <div className="flex gap-2 items-center">
-                <div className="w-[20px] h-[20px] bg-primary rounded-[4px] max-sm:hidden"></div>
-                <span className="text-primary max-sm:text-sm">
-                  {group?.givenClassPercentage}% Class given
-                </span>
+              <div className="w-full flex flex-col gap">
+                <div className="flex gap-2 items-center">
+                  <div className="w-[20px] h-[20px] bg-secondary rounded-[4px] max-sm:hidden"></div>
+                  <span className="text-error max-sm:text-sm">
+                    {group?.givenContentPercentage}% Content given
+                  </span>
+                </div>
+
+                <div className="flex gap-2 items-center">
+                  <div className="w-[20px] h-[20px] bg-primary rounded-[4px] max-sm:hidden"></div>
+                  <span className="text-primary max-sm:text-sm">
+                    {group?.givenClassPercentage}% Class given
+                  </span>
+                </div>
               </div>
             </div>
 

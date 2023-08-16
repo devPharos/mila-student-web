@@ -128,6 +128,12 @@ export default function Dashboard() {
             <Header studentData={student} />
             <div className="flex flex-col gap-4 max-w-[960px] w-full px-6 py-10">
               <div className="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-5 gap-4 items-center">
+                <div className="lg:hidden md:hidden"></div>
+
+                <div className="col-span-1">
+                  <ClassPeriodCard />
+                </div>
+
                 <div className="col-span-2">
                   <PeriodStatusCard
                     type="absence"
@@ -140,10 +146,6 @@ export default function Dashboard() {
                     type="frequency"
                     value={frequency[frequency.length - 1].percFrequency || 0}
                   />
-                </div>
-
-                <div>
-                  <ClassPeriodCard />
                 </div>
               </div>
 

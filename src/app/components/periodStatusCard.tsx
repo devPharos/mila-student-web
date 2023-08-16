@@ -25,20 +25,21 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
         <div className="flex items-center gap-2">
           {type === 'absence' ? (
             <>
-              <CalendarX size={20} className="text-primary" />
+              <CalendarX size={20} className="text-primary max-sm:hidden" />
               <span>Period Total Absences</span>
             </>
           ) : (
             <>
-              <CalendarCheck size={20} className="text-primary" />
+              <CalendarCheck size={20} className="text-primary max-sm:hidden" />
               <span>Period Frequency</span>
             </>
           )}
         </div>
         <Chip
           classNames={{
-            base: 'bg-information-light',
-            content: 'text-information font-semibold max-sm:text-xs',
+            base: 'bg-information-light max-sm:bg-neutral-lighter',
+            content:
+              'text-information font-semibold max-sm:text-xs max-sm:text-neutral max-sm:font-normal',
           }}
           variant="flat"
           radius="sm"
@@ -48,7 +49,7 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
             className={
               type === 'absence'
                 ? 'hidden'
-                : 'text-information font-semibold text-md max-sm:text-xs'
+                : 'text-information font-semibold text-md max-sm:text-xs max-sm:text-neutral max-sm:font-normal'
             }
           >
             %

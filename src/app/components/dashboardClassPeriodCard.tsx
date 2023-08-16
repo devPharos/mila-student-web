@@ -12,7 +12,7 @@ export function ClassPeriodCard() {
         header: [
           'text-primary max-sm:text-sm',
           'p-0',
-          'font-semibold',
+          'font-semibold max-sm:font-normal',
           'justify-center',
         ],
         base: ['rounded-[24px]', 'p-4'],
