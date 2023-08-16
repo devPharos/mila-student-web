@@ -16,7 +16,11 @@ export function DashboardClassCard() {
     <Card
       shadow="none"
       classNames={{
-        header: ['text-primary', 'p-0', 'gap-2 flex-col items-start'],
+        header: [
+          'max-sm:text-sm text-primary',
+          'p-0',
+          'gap-2 flex-col items-start',
+        ],
         body: ['p-0 pt-4 gap-2 items-center'],
         base: ['rounded-[24px]', 'p-4'],
       }}
@@ -27,18 +31,18 @@ export function DashboardClassCard() {
           <span className="font-semibold">Class {group?.level}</span>
         </div>
 
-        <div className="flex gap-4 flex-wrap align-left">
-          <span className="text-sm text-neutral">
+        <div className="flex gap-4 flex-wrap align-left max-sm:gap-2">
+          <span className="text-sm text-neutral max-sm:text-xs">
             <span className="text-neutral-dark font-semibold">Name: </span>
             {group?.name}
           </span>
 
-          <span className="text-sm text-neutral">
+          <span className="text-sm text-neutral max-sm:text-xs">
             <span className="text-neutral-dark font-semibold">Teacher: </span>
             {group?.teacher}
           </span>
 
-          <span className="text-sm text-neutral">
+          <span className="text-sm text-neutral max-sm:text-xs">
             <span className="text-neutral-dark font-semibold">
               Class SD/ED:{' '}
             </span>
@@ -46,8 +50,8 @@ export function DashboardClassCard() {
             {format(parseISO(group?.groupEndDate || ''), 'MMM do, yyyy')}
           </span>
 
-          <span className="text-sm text-neutral">
-            <span className="text-neutral-dark font-semibold">
+          <span className="text-sm text-neutral max-sm:text-xs">
+            <span className="text-neutral-dark font-semibold ">
               Student SD/EN:{' '}
             </span>
             {format(parseISO(group?.studentStartDate || ''), 'MMM do, yyyy')}{' '}
@@ -66,7 +70,7 @@ export function DashboardClassCard() {
       </CardHeader>
 
       <CardBody>
-        <div className="max-w-[600px] w-full flex items-center justify-between py-6 px-4">
+        <div className="max-w-[600px] w-full flex flex-wrap max-sm:justify-center max-sm: gap-2 items-center justify-between py-6 px-4">
           <div className="relative">
             <CircularProgress
               aria-label="Loading..."
@@ -107,22 +111,24 @@ export function DashboardClassCard() {
           <div className="flex flex-col gap-6">
             <div className="flex gap-4">
               <div className="flex gap-2 items-center">
-                <div className="w-[20px] h-[20px] bg-secondary rounded-[4px]"></div>
-                <span className="text-error">
+                <div className="w-[20px] h-[20px] bg-secondary rounded-[4px] max-sm:hidden"></div>
+                <span className="text-error max-sm:text-sm">
                   {group?.givenContentPercentage}% Content given
                 </span>
               </div>
 
               <div className="flex gap-2 items-center">
-                <div className="w-[20px] h-[20px] bg-primary rounded-[4px]"></div>
-                <span className="text-primary">
+                <div className="w-[20px] h-[20px] bg-primary rounded-[4px] max-sm:hidden"></div>
+                <span className="text-primary max-sm:text-sm">
                   {group?.givenClassPercentage}% Class given
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center w-full justify-between gap-2">
-              <span className="text-neutral-dark">Final average grade</span>
+            <div className="flex items-center w-full justify-between gap-2 max-sm:flex-col">
+              <span className="text-neutral-dark max-sm:text-sm">
+                Final average grade
+              </span>
               {group?.finalAverageGrade !== 0 ? (
                 <span className="text-information font-semibold">
                   {group?.finalAverageGrade}
@@ -131,7 +137,8 @@ export function DashboardClassCard() {
                 <Chip
                   classNames={{
                     base: 'bg-neutral-lighter',
-                    content: 'text-neutral font-semibold text-md',
+                    content:
+                      'text-neutral font-semibold text-md max-sm:text-xs',
                   }}
                   variant="flat"
                   radius="sm"

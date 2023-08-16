@@ -1,12 +1,6 @@
-import { Card, CardHeader, Chip } from '@nextui-org/react'
-import { CalendarCheck, CalendarX } from 'lucide-react'
+import { Card, CardHeader } from '@nextui-org/react'
 import { useRegister } from '../hooks/register'
 import { format, parseISO } from 'date-fns'
-
-interface IPeriodStatusCard {
-  type: 'absence' | 'frequency'
-  value: number
-}
 
 export function ClassPeriodCard() {
   const { periodDate } = useRegister()
@@ -15,7 +9,12 @@ export function ClassPeriodCard() {
     <Card
       shadow="none"
       classNames={{
-        header: ['text-primary', 'p-0', 'font-semibold', 'justify-center'],
+        header: [
+          'text-primary max-sm:text-sm',
+          'p-0',
+          'font-semibold',
+          'justify-center',
+        ],
         base: ['rounded-[24px]', 'p-4'],
       }}
     >

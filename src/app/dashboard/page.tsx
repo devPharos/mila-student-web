@@ -23,7 +23,7 @@ export default function Dashboard() {
     periodDate,
     setGroup,
     frequency,
-    params
+    params,
   } = useRegister()
   const [totalAbsenses, setTotalAbsenses] = useState(0)
 

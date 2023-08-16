@@ -17,8 +17,8 @@ export function DashboardClassesCard() {
 
   const itemClasses = {
     base: 'w-full bg-white p-4 rounded-[24px]',
-    title: 'font-md font-semibold text-primary',
-    subtitle: 'text-neutral',
+    title: 'font-semibold text-primary max-sm:text-sm',
+    subtitle: 'text-neutral max-sm:text-xs',
     trigger: 'bg-white p-0',
     content: 'pt-4',
   }
@@ -40,18 +40,20 @@ export function DashboardClassesCard() {
                 <div className="flex items-center gap-4">
                   <div className="h-[92px] w-[2px] bg-primary"></div>
 
-                  <div className="flex flex-col py-6 w-[75px]">
+                  <div className="flex flex-col py-6 w-[75px] max-sm:w-[55px]">
                     <span
                       className={
-                        index === 0 ? ' font-semibold text-primary' : 'hidden'
+                        index === 0
+                          ? ' font-semibold text-primary max-sm:text-sm max-sm:hidden'
+                          : 'hidden'
                       }
                     >
                       Date
                     </span>
-                    <span className="text-md text-neutral-dark">
+                    <span className="max-sm:text-sm text-neutral-dark">
                       {format(parseISO(value.classDate), 'MMM, dd')}
                     </span>
-                    <span className="text-sm text-neutral">
+                    <span className="max-sm:text-xs text-sm text-neutral">
                       {CapitalizeWord(value.weekDate)}
                     </span>
                   </div>
@@ -60,7 +62,9 @@ export function DashboardClassesCard() {
                 <div className="flex flex-col gap-4  w-[109px]">
                   <span
                     className={
-                      index === 0 ? ' font-semibold text-primary' : 'hidden'
+                      index === 0
+                        ? 'max-sm:text-sm font-semibold text-primary max-sm:hidden'
+                        : 'hidden'
                     }
                   >
                     Presence Status
@@ -83,16 +87,16 @@ export function DashboardClassesCard() {
                       ],
                       content: [
                         value.presenceStatus === 'Absent'
-                          ? 'text-error font-semibold text-md'
+                          ? 'max-sm:text-xs max-sm:font-normal text-error font-semibold text-md'
                           : value.presenceStatus === 'Sick'
-                          ? 'text-success-dark font-semibold text-md'
+                          ? 'max-sm:text-xs max-sm:font-normal text-success-dark font-semibold text-md'
                           : value.presenceStatus === 'Transfer'
-                          ? 'text-neutral font-semibold text-md'
+                          ? 'max-sm:text-xs max-sm:font-normal text-neutral font-semibold text-md'
                           : value.presenceStatus === 'Vacation'
-                          ? 'text-violet-500 font-semibold text-md'
+                          ? 'max-sm:text-xs max-sm:font-normal text-violet-500 font-semibold text-md'
                           : value.presenceStatus === 'Halfpresent'
-                          ? 'text-warning font-semibold text-md'
-                          : 'text-information font-semibold text-md',
+                          ? 'max-sm:text-xs max-sm:font-normal text-warning font-semibold text-md'
+                          : 'max-sm:text-xs max-sm:font-normal text-information font-semibold text-md',
                       ],
                     }}
                     variant="flat"
@@ -121,18 +125,20 @@ export function DashboardClassesCard() {
               <div className="flex flex-col gap-4 items-end">
                 <span
                   className={
-                    index === 0 ? ' font-semibold text-primary' : 'hidden'
+                    index === 0
+                      ? 'max-sm:text-sm font-semibold text-primary max-sm:hidden'
+                      : 'hidden'
                   }
                 >
                   Content Given
                 </span>
 
-                <div className="flex gap-2 items-center flex-wrap ">
+                <div className="flex gap-2 items-center flex-wrap justify-end ">
                   {value.program.map((value, index) => {
                     return (
                       <div className="flex gap-2 items-center" key={index}>
-                        <Check size={20} className="text-primary" />
-                        <span className="text-neutral-dark">
+                        <Check size={16} className="text-primary" />
+                        <span className="text-neutral-dark max-sm:text-xs">
                           {CapitalizeWord(value.description)}
                         </span>
                       </div>

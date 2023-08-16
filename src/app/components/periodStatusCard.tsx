@@ -12,7 +12,12 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
     <Card
       shadow="none"
       classNames={{
-        header: ['text-primary', 'p-0', 'font-semibold', 'justify-between'],
+        header: [
+          'max-sm:text-sm text-primary',
+          'p-0',
+          'font-semibold',
+          'justify-between',
+        ],
         base: ['rounded-[24px]', 'p-4'],
       }}
     >
@@ -33,7 +38,7 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
         <Chip
           classNames={{
             base: 'bg-information-light',
-            content: 'text-information font-semibold text-md',
+            content: 'text-information font-semibold max-sm:text-xs',
           }}
           variant="flat"
           radius="sm"
@@ -43,7 +48,7 @@ export function PeriodStatusCard({ type, value }: IPeriodStatusCard) {
             className={
               type === 'absence'
                 ? 'hidden'
-                : 'text-information font-semibold text-md'
+                : 'text-information font-semibold text-md max-sm:text-xs'
             }
           >
             %
