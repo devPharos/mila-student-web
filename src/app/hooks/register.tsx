@@ -22,6 +22,7 @@ import {
   getFirestore,
   onSnapshot,
   query,
+  setDoc,
   updateDoc,
   where,
 } from 'firebase/firestore'
@@ -55,7 +56,6 @@ interface IRegisterContext {
   frequency: StudentFrequency[]
   params: { maxAbsenses: number; contactEmail: string }
   updateProfilePic: (
-    url: string,
     registrationNumber: string,
     email: string,
     file: Blob,
@@ -156,17 +156,17 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     if (user && user.email) {
       const db = getFirestore()
 
-      const q = query(
-        collection(db, 'Students'),
-        where('email', '==', user.email),
-      )
-
       onSnapshot(query(collection(db, 'Params')), (snapshotQuery) => {
         snapshotQuery.forEach(async (doc) => {
           const data = doc.data()
           setParams({ ...params, ...data })
         })
       })
+
+      const q = query(
+        collection(db, 'Students'),
+        where('email', '==', user.email),
+      )
 
       onSnapshot(q, (snapshotQuery) => {
         snapshotQuery.forEach(async (doc) => {
@@ -243,38 +243,20 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function updateProfilePic(
-    url: string,
-    registrationNumber: string,
-    email: string,
-    file: Blob,
-  ) {
+  async function updateProfilePic(registrationNumber: string, email: string, file: Blob) {
     const storage = getStorage()
-
+  
     const storageRef = ref(storage, 'profile_' + registrationNumber)
-    const db = getFirestore()
-    uploadString(storageRef, url)
+  
+    await uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(storageRef).then((downloadURL) => {
+        const db = getFirestore()
 
-    const finalUrl = await getDownloadURL(storageRef)
-
-    const docRef = doc(db, 'Students', registrationNumber)
-
-    const q = query(collection(db, 'Students'), where('email', '==', email))
-
-    uploadBytes(storageRef, file)
-      .then(() => {
-        console.log('teste 1')
-        onSnapshot(q, (snapshotQuery) => {
-          snapshotQuery.forEach(() => {
-            updateDoc(docRef, {
-              imageUrl: finalUrl,
-            })
-          })
-        })
+        const studentRef = doc(db, 'Students', student.registrationNumber);
+        setDoc(studentRef, { ...student, imageUrl: downloadURL }, { merge: true });
+        setStudent({...student, imageUrl: downloadURL })
       })
-      .catch((error) => {
-        console.log(error)
-      })
+    });
   }
 
   useEffect(() => {

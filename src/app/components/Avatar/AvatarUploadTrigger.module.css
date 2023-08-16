@@ -1,0 +1,13 @@
+.container {
+    position: relative;
+    background-color: #ddd;
+    overflow: hidden;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .container input {
+    position: absolute;
+    visibility: hidden;
+  }
+  

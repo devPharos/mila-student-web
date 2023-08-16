@@ -11,6 +11,7 @@ import { StudentGroup } from '../@types/dashboard'
 import DashboardLoading from '../components/dashboardLoading'
 import Link from 'next/link'
 import { ClassPeriodCard } from '../components/dashboardClassPeriodCard'
+import AvatarUpdate from '../components/Avatar/AvatarUpdate'
 
 export default function Dashboard() {
   const [initializing, setInitializing] = useState(true)
@@ -22,7 +23,7 @@ export default function Dashboard() {
     periodDate,
     setGroup,
     frequency,
-    params,
+    params
   } = useRegister()
   const [totalAbsenses, setTotalAbsenses] = useState(0)
 
@@ -125,7 +126,6 @@ export default function Dashboard() {
         <>
           <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
             <Header studentData={student} />
-
             <div className="flex flex-col gap-4 max-w-[960px] w-full px-6 py-10">
               <div className="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-5 gap-4 items-center">
                 <div className="col-span-2">

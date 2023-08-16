@@ -16,11 +16,13 @@ export function useVerifyPathPermission(
 
   const isPublic = Object.values(APP_ROUTES.public).includes(pathName)
 
+  const isHome = pathName === '/' ? true : false
+
   if (!isPublic && !user && !loading) {
     router.push('/login')
   }
 
-  if (isPublic && user && !loading) {
+  if ((isPublic || isHome) && user && !loading) {
     router.push('/dashboard')
   }
 }
