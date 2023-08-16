@@ -74,7 +74,11 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
           text={`https://form.jotform.com/222696636785069?milaId=${
             studentData.registrationNumber
           }-${studentData.name?.toUpperCase()}`}
+          options={{
+            width: 220,
+          }}
         />
+
         <div className="z-20 absolute bg-white border-4 border-white py-2">
           <Image
             as={NextImage}

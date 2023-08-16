@@ -19,6 +19,12 @@ const myriadPro = localFont({
 
 export const metadata: Metadata = {
   title: 'Student Dashboard | MILA',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
