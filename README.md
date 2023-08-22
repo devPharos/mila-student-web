@@ -111,6 +111,6 @@ The following tools were used in the construction of the project:
 -   Schema validation: **[Zod](https://zod.dev/)**
 
 <h4 align="center"> 
-	🚧 In progress
+	✅ Complete
 </h4>
 
