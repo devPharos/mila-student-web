@@ -43,11 +43,9 @@ export function getCroppedImg(
   return new Promise((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
-        if (blob) {
-          blob.name = fileName
-          resolve(blob)
-          updateProfilePic(student.registrationNumber, student.email, blob)
-        }
+        blob.name = fileName
+        resolve(blob)
+        updateProfilePic(student.registrationNumber, student.email, blob)
       },
       'image/jpeg',
       1,
