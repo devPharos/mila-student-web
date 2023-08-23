@@ -33,13 +33,7 @@ import {
   StudentGroup,
   StudentPeriod,
 } from '../@types/dashboard'
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadString,
-} from 'firebase/storage'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import CapitalizeWord from '../functions/auxiliar'
 
 interface IRegisterContext {
@@ -243,20 +237,28 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function updateProfilePic(registrationNumber: string, email: string, file: Blob) {
+  async function updateProfilePic(
+    registrationNumber: string,
+    email: string,
+    file: Blob,
+  ) {
     const storage = getStorage()
-  
+
     const storageRef = ref(storage, 'profile_' + registrationNumber)
-  
+
     await uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(storageRef).then((downloadURL) => {
         const db = getFirestore()
 
-        const studentRef = doc(db, 'Students', student.registrationNumber);
-        setDoc(studentRef, { ...student, imageUrl: downloadURL }, { merge: true });
-        setStudent({...student, imageUrl: downloadURL })
+        const studentRef = doc(db, 'Students', student.registrationNumber)
+        setDoc(
+          studentRef,
+          { ...student, imageUrl: downloadURL },
+          { merge: true },
+        )
+        setStudent({ ...student, imageUrl: downloadURL })
       })
-    });
+    })
   }
 
   useEffect(() => {

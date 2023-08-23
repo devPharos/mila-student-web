@@ -1,5 +1,6 @@
 'use client'
 import { Spinner } from '@nextui-org/react'
+import { Header } from './header'
 
 export default function DashboardLoading() {
   return (

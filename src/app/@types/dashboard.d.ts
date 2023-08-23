@@ -76,5 +76,5 @@ export interface StudentGroup {
 }
 
 export interface IChildrenProps {
-  studentData: Student
+  studentData: Student | null
 }
