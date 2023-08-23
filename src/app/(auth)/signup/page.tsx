@@ -7,6 +7,7 @@ import { useState } from 'react'
 import SignUpFirstStep from '../../components/signUpSteps/firstStep'
 import Link from 'next/link'
 import SignUpSecondStep from '../../components/signUpSteps/secondStep'
+import { Header } from '@/app/components/header'
 export default function SignUp() {
   interface IUserFirstStepData {
     email: string

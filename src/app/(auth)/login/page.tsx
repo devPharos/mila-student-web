@@ -11,6 +11,7 @@ import * as dotenv from 'dotenv'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { logIn } from '@/app/hooks/register'
+import { Header } from '@/app/components/header'
 
 export default function Login() {
   dotenv.config()
@@ -91,7 +92,7 @@ export default function Login() {
     <div className="min-h-screen">
       <form
         action=""
-        className="bg-neutral-lighter flex flex-col min-h-screen items-center justify-center p-6 w-full"
+        className="bg-neutral-lighter flex flex-col flex-1 items-center justify-center p-6 w-full"
         onSubmit={handleSubmit(handleLoginSubmit)}
       >
         <div className="max-w-sm w-full flex flex-col items-center gap-14">

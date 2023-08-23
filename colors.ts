@@ -12,6 +12,7 @@ export const milaColors = {
     300: '#ff9213',
     400: '#b3660d',
     500: '#9c590c',
+    600: '#ff4000',
   },
   green: {
     50: '#EBF8ED',

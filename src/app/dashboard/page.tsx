@@ -11,7 +11,6 @@ import { StudentGroup } from '../@types/dashboard'
 import DashboardLoading from '../components/dashboardLoading'
 import Link from 'next/link'
 import { ClassPeriodCard } from '../components/dashboardClassPeriodCard'
-import AvatarUpdate from '../components/Avatar/AvatarUpdate'
 
 export default function Dashboard() {
   const [initializing, setInitializing] = useState(true)
@@ -25,7 +24,6 @@ export default function Dashboard() {
     frequency,
     params,
   } = useRegister()
-  const [totalAbsenses, setTotalAbsenses] = useState(0)
 
   useEffect(() => {
     if (periodDate) {
@@ -90,7 +88,6 @@ export default function Dashboard() {
       retGroups.map((group) => {
         return (group.periodAbsences = periodAbsences)
       })
-      setTotalAbsenses(periodAbsences)
       setGroup(retGroups[0])
       setInitializing(false)
     }

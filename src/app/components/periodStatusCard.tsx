@@ -1,6 +1,5 @@
 import { Card, CardHeader, Chip } from '@nextui-org/react'
 import { CalendarCheck, CalendarX } from 'lucide-react'
-import { useRegister } from '../hooks/register'
 
 interface IPeriodStatusCard {
   type: 'absence' | 'frequency'

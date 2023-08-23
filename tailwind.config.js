@@ -41,6 +41,7 @@ module.exports = {
         'error-dark': milaColors.red[500],
         error: milaColors.red[300],
         'error-light': milaColors.red[50],
+        orange: milaColors.orange[600],
       },
     },
   },
