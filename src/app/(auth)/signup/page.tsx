@@ -45,7 +45,7 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen flex flex-col">
-    <Header />
+      <Header studentData={null} />
       {/* <div className="bg-primary"></div> */}
       <div className="bg-neutral-lighter flex flex-col flex-1 items-center justify-center p-6">
         <div className="max-w-sm w-full flex flex-col items-center gap-14">

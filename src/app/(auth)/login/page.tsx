@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import logo from '../../assets/logo.svg'
 import Link from 'next/link'
 import * as dotenv from 'dotenv'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { logIn } from '@/app/hooks/register'
 import { Header } from '@/app/components/header'
@@ -27,8 +27,6 @@ export default function Login() {
     emailFromSignUp = existentUserCredentials[0]
     registrationNumberFromSignUp = existentUserCredentials[1]
   }
-
-  const router = useRouter()
 
   const loginFormSchema = z.object({
     registrationNumber: z
@@ -92,7 +90,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Header studentData={null} />
       {/* <div className="bg-primary"></div> */}
       <form
         action=""

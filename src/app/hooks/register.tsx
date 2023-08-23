@@ -54,7 +54,7 @@ interface IRegisterContext {
     email: string,
     file: Blob,
   ) => void
-  updateDashboard: (data: any) => void
+  updateDashboard: (data: unknown) => void
 }
 
 const defaultStudent = {
@@ -75,6 +75,7 @@ const defaultStudent = {
 const defaultDashboard = { data: {}, fromDate: new Date() }
 
 export const RegisterContext = createContext<IRegisterContext>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultStudent as any,
 )
 
@@ -142,7 +143,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function updateDashboard(data: any) {
+  async function updateDashboard(data: unknown) {
     setDashboard({ ...dashboard, data, fromDate: new Date() })
   }
 
@@ -246,7 +247,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
     const storageRef = ref(storage, 'profile_' + registrationNumber)
 
-    await uploadBytes(storageRef, file).then((snapshot) => {
+    await uploadBytes(storageRef, file).then(() => {
       getDownloadURL(storageRef).then((downloadURL) => {
         const db = getFirestore()
 

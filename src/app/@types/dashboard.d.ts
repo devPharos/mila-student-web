@@ -11,11 +11,11 @@ export interface Student {
   country: string | null
   currentGroup: string | null
   emailVerified: boolean
-  nsevis?: any
+  nsevis?: unknown
 }
 
 export interface Dashboard {
-  data: any
+  data: unknown
   fromDate: Date
 }
 

@@ -3,7 +3,6 @@ import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import styles from './AvatarEditor.module.css'
 import { Button } from '@nextui-org/react'
-import { useRegister } from '@/app/hooks/register'
 
 export function getCroppedImg(
   student: { registrationNumber: any; email: any },
@@ -46,7 +45,6 @@ export function getCroppedImg(
         resolve(blob)
         console.log({ blob })
         updateProfilePic(student.registrationNumber, student.email, blob)
-        // if(process.env.NODE_ENV!=='production') generateDownload(blob)
       },
       'image/jpeg',
       1,
@@ -54,18 +52,9 @@ export function getCroppedImg(
   })
 }
 
-function generateDownload(blob: Blob) {
-  const previewUrl = window.URL.createObjectURL(blob)
-
-  const anchor = document.createElement('a')
-  anchor.download = 'cropPreview.png'
-  anchor.href = URL.createObjectURL(blob)
-  anchor.click()
-
-  window.URL.revokeObjectURL(previewUrl)
-}
-
 type Props = {
+  student: object
+  updateProfilePic: () => void
   sourceImg: string
   onFinishUpload: () => void
 }
@@ -90,12 +79,10 @@ function AvatarEditor({
 
   const onLoad = useCallback((img: HTMLImageElement) => {
     imgRef.current = img
-    console.log({ img })
   }, [])
 
   const uploadImage = async () => {
-    console.log({ imgRef })
-    const blobImg = await getCroppedImg(
+    await getCroppedImg(
       student,
       updateProfilePic,
       imgRef.current,

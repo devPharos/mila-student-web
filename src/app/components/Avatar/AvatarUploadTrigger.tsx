@@ -1,7 +1,6 @@
 import { ChangeEvent } from 'react'
 import styles from './AvatarUploadTrigger.module.css'
 import { Avatar } from '@nextui-org/react'
-import { useRegister } from '@/app/hooks/register'
 
 type Props = {
   onNewSelectedFile: (imageResult: string) => void
