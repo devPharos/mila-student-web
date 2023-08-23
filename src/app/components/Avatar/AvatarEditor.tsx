@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useCallback, useRef } from 'react'
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
@@ -8,7 +9,7 @@ export function getCroppedImg(
   student: { registrationNumber: any; email: any },
   updateProfilePic: (arg0: any, arg1: any, arg2: Blob | null) => void,
   image: any,
-  crop: { width: number; height: number; x: number; y: number } | null,
+  crop: { width: number; height: number; x: number; y: number },
   fileName: string,
 ) {
   const canvas = document.createElement('canvas')
@@ -22,29 +23,31 @@ export function getCroppedImg(
   const pixelRatio = window.devicePixelRatio
   canvas.width = crop.width * pixelRatio
   canvas.height = crop.height * pixelRatio
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
-  ctx.imageSmoothingQuality = 'high'
-
-  ctx.drawImage(
-    image,
-    crop.x * scaleX,
-    crop.y * scaleY,
-    crop.width * scaleX,
-    crop.height * scaleY,
-    0,
-    0,
-    crop.width,
-    crop.height,
-  )
+  if (ctx) {
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
+    ctx.imageSmoothingQuality = 'high'
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height,
+    )
+  }
 
   // As a blob
   return new Promise((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
-        blob.name = fileName
-        resolve(blob)
-        console.log({ blob })
-        updateProfilePic(student.registrationNumber, student.email, blob)
+        if (blob) {
+          blob.name = fileName
+          resolve(blob)
+          updateProfilePic(student.registrationNumber, student.email, blob)
+        }
       },
       'image/jpeg',
       1,
@@ -70,8 +73,7 @@ function AvatarEditor({
     x: 0,
     y: 0,
     width: 100,
-    height: 100,
-    circularCrop: false,
+    height: 100
   })
   const [completedCrop, setCompletedCrop] = useState(null)
 
@@ -108,7 +110,7 @@ function AvatarEditor({
         minHeight={100}
         className={styles.crop}
       >
-        <img ref={imgRef} src={sourceImg} />
+        <img ref={imgRef} alt="profile" src={sourceImg} />
       </ReactCrop>
       <Button color="primary" onPress={uploadImage}>
         Upload avatar
