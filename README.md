@@ -4,6 +4,8 @@
 
 <p align="center">MILA is an English school for international students who want to study abroad in the USA.</p>
 
+
+
 <p align="center">
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/devPharos/mila-student-web?color=%2304D361">
 
@@ -109,6 +111,8 @@ The following tools were used in the construction of the project:
 -   Fonts:  **[Myriad Pro]()**
 -   UI Library: **[Next UI](https://nextui.org/)**
 -   Schema validation: **[Zod](https://zod.dev/)**
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9d37fb5a-33d1-4e70-9dab-c723c83eac10/deploy-status)](https://app.netlify.com/sites/mila-studentdashboard/deploys)
 
 <h4 align="center"> 
 	✅ Complete
