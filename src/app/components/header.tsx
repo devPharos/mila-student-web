@@ -17,10 +17,7 @@ export function Header({ studentData }: IChildrenProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   return (
     <div className="border-b drop-shadow-sms bg-white w-full">
-      <div
-        className="flex items-center justify-between gap-4 py-2.5 h-[86.4px] w-full m-auto"
-        style={{ maxWidth: 1666 }}
-      >
+      <div className="flex items-center justify-between gap-4 px-16 py-2.5 h-[86.4px] w-full m-auto max-w-[1666px]">
         <div className="flex items-center justify-center gap-8">
           <Image
             as={NextImage}
