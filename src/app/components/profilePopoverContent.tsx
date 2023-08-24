@@ -71,9 +71,7 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
       </div>
       <div className="flex flex-row justify-center items-center">
         <Canvas
-          text={`https://form.jotform.com/222696636785069?milaId=${
-            studentData.registrationNumber
-          }-${studentData.name?.toUpperCase()}`}
+          text={`https://form.jotform.com/222696636785069?milaId=${studentData?.registrationNumber}-${studentData?.name?.toUpperCase()}`}
           options={{
             width: 220,
           }}
