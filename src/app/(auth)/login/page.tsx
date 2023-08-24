@@ -92,7 +92,7 @@ export default function Login() {
     <div className="min-h-screen">
       <form
         action=""
-        className="bg-neutral-lighter flex flex-col flex-1 items-center justify-center p-6 w-full"
+        className="bg-neutral-lighter min-h-screen flex flex-col flex-1 items-center justify-center p-6 w-full"
         onSubmit={handleSubmit(handleLoginSubmit)}
       >
         <div className="max-w-sm w-full flex flex-col items-center gap-14">
