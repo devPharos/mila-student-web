@@ -48,7 +48,12 @@ interface IRegisterContext {
   setGroup: React.Dispatch<React.SetStateAction<StudentGroup | null>>
   groups: StudentGroup[]
   frequency: StudentFrequency[]
-  params: { maxAbsenses: number; contactEmail: string }
+  params: {
+    maxAbsenses: number
+    contactEmail: string
+    contact_orl: string
+    contact_mia: string
+  }
   updateProfilePic: (
     registrationNumber: string,
     email: string,

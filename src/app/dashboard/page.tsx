@@ -97,25 +97,46 @@ export default function Dashboard() {
     <>
       {initializing ? (
         <DashboardLoading />
-      ) : frequency[frequency.length - 1].percFrequency < 80 ? (
+      ) : frequency[frequency.length - 1].percFrequency < params.maxAbsenses ? (
         <>
           <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
             <Header studentData={student} />
 
-            <div className="bg-neutral-lighter flex justify-center items-center flex-col p-24">
-              <span className="text-lg text-neutral-dark">Dear student, </span>
-              <span className="text-neutral-dark">
-                Please send an e-mail to
-              </span>
-
-              <Link
-                className="font-semibold text-neutral-dark"
-                href={`mailto:${params.contactEmail}?subject=Student Dashboard`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {params.contactEmail}
-              </Link>
+            <div className="bg-neutral-lighter flex justify-center items-center flex-col p-12 text-sm text-left bg-white rounded-2xl mt-6 font-normal text-gray-600 ">
+              <p>Dear student,</p>
+              <p className="mt-4">
+                Please send an e-mail to{' '}
+                {student.registrationNumber.substring(0, 3) === 'ORL' ? (
+                  <Link
+                    className="font-semibold text-neutral-dark"
+                    href={`mailto:${params.contact_orl}?subject=Student Dashboard`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {params.contact_orl}
+                  </Link>
+                ) : student.registrationNumber.substring(0, 3) === 'MIA' ? (
+                  <Link
+                    className="font-semibold text-neutral-dark"
+                    href={`mailto:${params.contact_mia}?subject=Student Dashboard`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {params.contact_mia}
+                  </Link>
+                ) : (
+                  <Link
+                    className="font-semibold text-neutral-dark"
+                    href={`mailto:${params.contact_orl}?subject=Student Dashboard`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {params.contact_orl}
+                  </Link>
+                )}{' '}
+                to receive information about your attendance.
+              </p>
+              <p className="mt-4">MILA's Intelligence Team</p>
             </div>
           </div>
         </>
