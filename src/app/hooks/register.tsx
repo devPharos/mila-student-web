@@ -90,9 +90,13 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
   const [params, setParams] = useState<{
     maxAbsenses: number
     contactEmail: string
+    contact_orl: string
+    contact_mia: string
   }>({
     maxAbsenses: 0,
     contactEmail: '',
+    contact_orl: '',
+    contact_mia: '',
   })
 
   const [period, setPeriod] = useState<StudentPeriod | null>(null)
