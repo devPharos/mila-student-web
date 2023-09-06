@@ -1,7 +1,7 @@
 import { auth } from '@/app/api/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@nextui-org/react'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth'
 import { doc, getFirestore, setDoc } from 'firebase/firestore'
 import { ArrowRight, Eye, EyeOff, Lock } from 'lucide-react'
 import { useState } from 'react'
@@ -87,6 +87,7 @@ export default function SignUpSecondStep({
               createdAt: new Date(),
             },
           ).then(() => {
+            signOut(auth)
             changeStep('step-2')
           })
         })
@@ -110,7 +111,7 @@ export default function SignUpSecondStep({
     <>
       {step === 'step-3' ? (
         <p className={'bg-primary text-white w-full text-center p-4 rounded '}>
-          Your account was created!
+          Your account has been created!
         </p>
       ) : (
         <form
