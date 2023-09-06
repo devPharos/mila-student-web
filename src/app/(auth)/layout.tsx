@@ -14,7 +14,7 @@ export default function RootLayout({
   const [user, loading] = useAuthState(auth)
   useVerifyPathPermission(user, loading)
 
-  if (loading || user) {
+  if (loading) {
     return <DashboardLoading />
   }
 

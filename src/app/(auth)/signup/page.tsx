@@ -70,6 +70,7 @@ export default function SignUp() {
               <SignUpSecondStep
                 changeStep={changeStep}
                 userFirstStepData={user}
+                step={step}
               />
             )}
           </div>

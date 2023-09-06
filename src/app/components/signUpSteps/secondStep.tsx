@@ -21,11 +21,13 @@ interface IUserData extends IUserFirstStepData {
 interface ISecondStepProps {
   changeStep: (step: 'step-1' | 'step-2' | 'step-3') => void
   userFirstStepData: IUserFirstStepData
+  step: 'step-1' | 'step-2' | 'step-3'
 }
 
 export default function SignUpSecondStep({
   changeStep,
   userFirstStepData,
+  step,
 }: ISecondStepProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -67,27 +69,24 @@ export default function SignUpSecondStep({
         userSignUpSecondStepData.email,
         userSignUpSecondStepData.password,
       )
-        .then(() => {
+        .then(async () => {
           const db = getFirestore()
 
-          const docRef = doc(
-            db,
-            'Students',
-            userSignUpSecondStepData.registrationNumber,
-          )
-
-          setDoc(docRef, {
-            type: 'Student',
-            email: userSignUpSecondStepData.email,
-            registration: userSignUpSecondStepData.studentID,
-            registrationNumber: userSignUpSecondStepData.registrationNumber,
-            imageUrl: null,
-            name: null,
-            level: null,
-            birthDate: null,
-            country: null,
-            createdAt: new Date(),
-          }).then(() => {
+          await setDoc(
+            doc(db, 'Students', userSignUpSecondStepData.registrationNumber),
+            {
+              type: 'Student',
+              email: userSignUpSecondStepData.email,
+              registration: userSignUpSecondStepData.studentID,
+              registrationNumber: userSignUpSecondStepData.registrationNumber,
+              imageUrl: null,
+              name: null,
+              level: null,
+              birthDate: null,
+              country: null,
+              createdAt: new Date(),
+            },
+          ).then(() => {
             changeStep('step-2')
           })
         })
@@ -107,113 +106,120 @@ export default function SignUpSecondStep({
 
   const handleConfirmPasswordVisibility = () =>
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-
   return (
     <>
-      <form
-        action=""
-        className="flex flex-col gap-6 w-full"
-        onSubmit={handleSubmit(handleSignUpSecondStepSubmit)}
-      >
-        <Input
-          label="Password"
-          id="password"
-          type={isPasswordVisible ? 'text' : 'password'}
-          classNames={{
-            label: 'text-neutral',
-            input: ['bg-white', 'text-neutral-dark'],
-          }}
-          startContent={
-            <Lock
-              className={errors.password ? 'text-error' : 'text-neutral'}
-              strokeWidth={1.5}
-              size={20}
-            />
-          }
-          endContent={
-            isPasswordVisible ? (
-              <Eye
-                size={20}
-                strokeWidth={1.5}
-                className={
-                  errors.password
-                    ? 'text-error cursor-pointer'
-                    : 'cursor-pointer text-neutral'
-                }
-                onClick={handlePasswordVisibility}
-              />
-            ) : (
-              <EyeOff
-                size={20}
-                strokeWidth={1.5}
-                className={
-                  errors.password
-                    ? 'text-error cursor-pointer'
-                    : 'cursor-pointer text-neutral'
-                }
-                onClick={handlePasswordVisibility}
-              />
-            )
-          }
-          errorMessage={errors.password?.message}
-          validationState={errors.password && 'invalid'}
-          {...register('password')}
-        />
-
-        <Input
-          label="Confirm your password"
-          id="confirmPassword"
-          type={isConfirmPasswordVisible ? 'text' : 'password'}
-          classNames={{
-            label: 'text-neutral',
-            input: ['bg-white', 'text-neutral-dark'],
-          }}
-          startContent={
-            <Lock
-              className={errors.confirmPassword ? 'text-error' : 'text-neutral'}
-              strokeWidth={1.5}
-              size={20}
-            />
-          }
-          endContent={
-            isConfirmPasswordVisible ? (
-              <Eye
-                size={20}
-                strokeWidth={1.5}
-                className={
-                  errors.confirmPassword
-                    ? 'text-error cursor-pointer'
-                    : 'cursor-pointer text-neutral'
-                }
-                onClick={handleConfirmPasswordVisibility}
-              />
-            ) : (
-              <EyeOff
-                size={20}
-                strokeWidth={1.5}
-                className={
-                  errors.confirmPassword
-                    ? 'text-error cursor-pointer'
-                    : 'cursor-pointer text-neutral'
-                }
-                onClick={handleConfirmPasswordVisibility}
-              />
-            )
-          }
-          errorMessage={errors.confirmPassword?.message}
-          validationState={errors.confirmPassword && 'invalid'}
-          {...register('confirmPassword')}
-        />
-
-        <Button
-          className={'bg-primary text-white w-full'}
-          endContent={<ArrowRight size={20} />}
-          radius="md"
-          type="submit"
+      {step === 'step-3' ? (
+        <p className={'bg-primary text-white w-full text-center p-4 rounded '}>
+          Your account was created!
+        </p>
+      ) : (
+        <form
+          action=""
+          className="flex flex-col gap-6 w-full"
+          onSubmit={handleSubmit(handleSignUpSecondStepSubmit)}
         >
-          Continue
-        </Button>
-      </form>
+          <Input
+            label="Password"
+            id="password"
+            type={isPasswordVisible ? 'text' : 'password'}
+            classNames={{
+              label: 'text-neutral',
+              input: ['bg-white', 'text-neutral-dark'],
+            }}
+            startContent={
+              <Lock
+                className={errors.password ? 'text-error' : 'text-neutral'}
+                strokeWidth={1.5}
+                size={20}
+              />
+            }
+            endContent={
+              isPasswordVisible ? (
+                <Eye
+                  size={20}
+                  strokeWidth={1.5}
+                  className={
+                    errors.password
+                      ? 'text-error cursor-pointer'
+                      : 'cursor-pointer text-neutral'
+                  }
+                  onClick={handlePasswordVisibility}
+                />
+              ) : (
+                <EyeOff
+                  size={20}
+                  strokeWidth={1.5}
+                  className={
+                    errors.password
+                      ? 'text-error cursor-pointer'
+                      : 'cursor-pointer text-neutral'
+                  }
+                  onClick={handlePasswordVisibility}
+                />
+              )
+            }
+            errorMessage={errors.password?.message}
+            validationState={errors.password && 'invalid'}
+            {...register('password')}
+          />
+
+          <Input
+            label="Confirm your password"
+            id="confirmPassword"
+            type={isConfirmPasswordVisible ? 'text' : 'password'}
+            classNames={{
+              label: 'text-neutral',
+              input: ['bg-white', 'text-neutral-dark'],
+            }}
+            startContent={
+              <Lock
+                className={
+                  errors.confirmPassword ? 'text-error' : 'text-neutral'
+                }
+                strokeWidth={1.5}
+                size={20}
+              />
+            }
+            endContent={
+              isConfirmPasswordVisible ? (
+                <Eye
+                  size={20}
+                  strokeWidth={1.5}
+                  className={
+                    errors.confirmPassword
+                      ? 'text-error cursor-pointer'
+                      : 'cursor-pointer text-neutral'
+                  }
+                  onClick={handleConfirmPasswordVisibility}
+                />
+              ) : (
+                <EyeOff
+                  size={20}
+                  strokeWidth={1.5}
+                  className={
+                    errors.confirmPassword
+                      ? 'text-error cursor-pointer'
+                      : 'cursor-pointer text-neutral'
+                  }
+                  onClick={handleConfirmPasswordVisibility}
+                />
+              )
+            }
+            errorMessage={errors.confirmPassword?.message}
+            validationState={errors.confirmPassword && 'invalid'}
+            {...register('confirmPassword')}
+          />
+
+          <Button
+            className={'bg-primary text-white w-full'}
+            endContent={<ArrowRight size={20} />}
+            radius="md"
+            type="submit"
+          >
+            Continue
+          </Button>
+        </form>
+      )}
     </>
   )
 }
