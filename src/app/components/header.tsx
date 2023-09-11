@@ -34,7 +34,7 @@ export function Header({ studentData }: IChildrenProps) {
         </div>
         <div className="flex flex-row items-center gap-8">
           <Link
-            href="https://milaacademy.feitonasix.com.br/"
+            href="https://milausa.com/"
             className="transition duration-300 ease-in-out hover:scale-110"
           >
             {/* <Button

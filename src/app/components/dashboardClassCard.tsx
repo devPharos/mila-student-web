@@ -73,7 +73,7 @@ export function DashboardClassCard() {
                   size="lg"
                   value={group?.givenClassPercentage}
                   classNames={{
-                    svg: 'w-[125px] h-[125px] ',
+                    svg: 'w-[175px] h-[175px] ',
                     indicator: 'stroke-primary',
                     track: 'stroke-information-light',
                   }}
@@ -85,7 +85,7 @@ export function DashboardClassCard() {
                     size="lg"
                     value={group?.givenContentPercentage}
                     classNames={{
-                      svg: 'w-[100px] h-[100px] ',
+                      svg: 'w-[150px] h-[150px] ',
                       indicator: 'stroke-error',
                       track: 'stroke-error-light',
                       value: 'text-md text-neutral-dark',
@@ -94,11 +94,11 @@ export function DashboardClassCard() {
                 </div>
 
                 {group?.status === 'FINISHED' ? (
-                  <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
+                  <span className="absolute text-neutral-dark text-sm top-[77px] left-[62px]">
                     Finished
                   </span>
                 ) : (
-                  <span className="absolute text-neutral-dark text-[0.75rem] top-[53px] left-[35px]">
+                  <span className="absolute text-neutral-dark text-sm top-[77px] left-[55px]">
                     In progress
                   </span>
                 )}
