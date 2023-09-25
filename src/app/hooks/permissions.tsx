@@ -10,6 +10,7 @@ export function useVerifyPathPermission(
     public: {
       login: '/login',
       first_access: '/signup',
+      forgot: '/forgot',
     },
   }
   const router = useRouter()

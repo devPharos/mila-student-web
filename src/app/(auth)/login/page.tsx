@@ -96,7 +96,7 @@ export default function Login() {
         className="bg-neutral-lighter flex flex-col flex-1 items-center justify-center p-6 w-full"
         onSubmit={handleSubmit(handleLoginSubmit)}
       >
-        <div className="max-w-sm w-full flex flex-col items-center gap-14">
+        <div className="max-w-sm w-full flex flex-col items-center gap-8">
           <Image
             width={130}
             src={logo.src}
@@ -187,6 +187,16 @@ export default function Login() {
           >
             Log In
           </Button>
+
+          <Link href="/forgot" className="w-full">
+            <Button
+              className="border border-gray-300 bg-inherit text-primary w-full hover:bg-gray-300"
+              radius="md"
+              type="button"
+            >
+              I Forgot my password
+            </Button>
+          </Link>
 
           <Link href="/signup" className="font-semibold text-primary text-sm">
             This is my first access

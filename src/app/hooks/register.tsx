@@ -2,6 +2,7 @@ import {
   User,
   browserSessionPersistence,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
@@ -14,7 +15,7 @@ import React, {
   useEffect,
 } from 'react'
 import { auth } from '../api/firebase'
-import { LoginFormData } from '../@types/forms'
+import { LoginFormData, ForgotFormData } from '../@types/forms'
 import {
   DocumentData,
   collection,
@@ -123,14 +124,14 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
   async function getDashboardData(studentRegistration: number | null) {
     if (student) {
       try {
-        const response = await fetch(
-          `${process.env.API_URL}/students/dashboard/${studentRegistration}`,
-        )
-        const data = await response.json()
         const today = new Date()
         const month = today.getMonth()
         const year = today.getFullYear()
         const thisPeriod = year + '-' + (month + 1).toString().padStart(2, '0')
+        const response = await fetch(
+          `${process.env.API_URL}/students/dashboard/${studentRegistration}/${thisPeriod}`,
+        )
+        const data = await response.json()
 
         setDashboard({ ...dashboard, ...data.data, fromDate: new Date() })
         data.data.periods.forEach((p: StudentPeriod) => {
@@ -336,10 +337,23 @@ const logIn = (
     })
 }
 
+const forgotPW = async (
+  userFormData: ForgotFormData,
+  setLoginError: Dispatch<SetStateAction<boolean>>,
+  setRecoverySent: Dispatch<SetStateAction<boolean>>,
+) => {
+  try {
+    await sendPasswordResetEmail(auth, userFormData.email)
+    setRecoverySent(true)
+  } catch (err) {
+    setLoginError(true)
+  }
+}
+
 const useRegister = () => {
   const context = useContext(RegisterContext)
 
   return context
 }
 
-export { RegisterProvider, useRegister, logIn }
+export { RegisterProvider, useRegister, logIn, forgotPW }

@@ -23,14 +23,18 @@ export function DashboardClassesCard() {
     content: 'pt-4',
   }
 
+  const classes = group?.classes.filter(
+    (classStatus) => classStatus.presenceStatus,
+  )
+
   return (
     <Accordion itemClasses={itemClasses} className="px-0">
       <AccordionItem
         aria-label="classes"
-        title={`${group?.classes.length} Classes`}
+        title={`${classes?.length} Classes`}
         subtitle={group?.workload}
       >
-        {group?.classes.map((value: StudentClass, index: number) => {
+        {classes?.map((value: StudentClass, index: number) => {
           return (
             <div
               className="flex items-center justify-between gap-2 pb-2"
