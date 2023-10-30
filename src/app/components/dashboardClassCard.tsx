@@ -6,11 +6,12 @@ import {
   CircularProgress,
 } from '@nextui-org/react'
 import { Backpack } from 'lucide-react'
-import { useRegister } from '../hooks/register'
+// import { useRegister } from '../hooks/register'
 import { format, parseISO } from 'date-fns'
 import CapitalizeWord from '../functions/auxiliar'
 
-export function DashboardClassCard({ group }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function DashboardClassCard({ group }: any) {
   // const { group } = useRegister()
 
   return (

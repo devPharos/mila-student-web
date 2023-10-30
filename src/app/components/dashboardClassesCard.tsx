@@ -7,12 +7,13 @@ import {
   Palmtree,
   Stethoscope,
 } from 'lucide-react'
-import { useRegister } from '../hooks/register'
+// import { useRegister } from '../hooks/register'
 import CapitalizeWord from '../functions/auxiliar'
 import { StudentClass } from '../@types/dashboard'
 import { format, parseISO } from 'date-fns'
 
-export function DashboardClassesCard({ group }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function DashboardClassesCard({ group }: any) {
   // const { group } = useRegister()
 
   const itemClasses = {
@@ -24,7 +25,8 @@ export function DashboardClassesCard({ group }) {
   }
 
   const classes = group?.classes.filter(
-    (classStatus) => classStatus.presenceStatus,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (classStatus: { presenceStatus: any }) => classStatus.presenceStatus,
   )
 
   return (
