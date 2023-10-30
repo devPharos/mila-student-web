@@ -10,8 +10,8 @@ import { useRegister } from '../hooks/register'
 import { format, parseISO } from 'date-fns'
 import CapitalizeWord from '../functions/auxiliar'
 
-export function DashboardClassCard() {
-  const { group } = useRegister()
+export function DashboardClassCard({ group }) {
+  // const { group } = useRegister()
 
   return (
     <Card

@@ -6,7 +6,7 @@ import { Header } from '../components/header'
 import { PeriodStatusCard } from '../components/periodStatusCard'
 
 import { useRegister } from '../hooks/register'
-import { isAfter, isBefore, parseISO } from 'date-fns'
+import { isAfter, isBefore, parseISO, subDays } from 'date-fns'
 import { StudentGroup } from '../@types/dashboard'
 import DashboardLoading from '../components/dashboardLoading'
 import Link from 'next/link'
@@ -57,7 +57,7 @@ export default function Dashboard() {
                   if (
                     isAfter(
                       parseISO(pclass.classDate),
-                      parseISO(g.studentStartDate),
+                      subDays(parseISO(g.studentStartDate), 1),
                     ) &&
                     isBefore(
                       parseISO(pclass.classDate),
@@ -166,10 +166,13 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
+              {groups.map((g) => (
+                <>
+                  <DashboardClassCard group={g} />
 
-              <DashboardClassCard />
-
-              <DashboardClassesCard />
+                  <DashboardClassesCard group={g} />
+                </>
+              ))}
             </div>
           </div>
         </>

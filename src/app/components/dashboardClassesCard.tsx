@@ -12,8 +12,8 @@ import CapitalizeWord from '../functions/auxiliar'
 import { StudentClass } from '../@types/dashboard'
 import { format, parseISO } from 'date-fns'
 
-export function DashboardClassesCard() {
-  const { group } = useRegister()
+export function DashboardClassesCard({ group }) {
+  // const { group } = useRegister()
 
   const itemClasses = {
     base: 'w-full bg-white p-4 rounded-[24px]',

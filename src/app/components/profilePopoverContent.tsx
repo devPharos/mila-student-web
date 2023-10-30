@@ -66,7 +66,7 @@ export function ProfilePopoverContent({ studentData }: IChildrenProps) {
           MILA ID
         </span>
         <span className="text-neutral-dark text-center text-sm px-4 max-sm:text-xs">
-          Scan this code at the locations that requires your MILA ID
+          Scan this code at the locations that require your MILA ID
         </span>
       </div>
       <div className="flex flex-row justify-center items-center">
