@@ -263,7 +263,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
     const storageRef = ref(storage, 'profile_' + registrationNumber)
 
-    await uploadBytes(storageRef, file).then((snapshot) => {
+    await uploadBytes(storageRef, file).then(() => {
       getDownloadURL(storageRef).then((downloadURL) => {
         const db = getFirestore()
 

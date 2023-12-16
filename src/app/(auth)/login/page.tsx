@@ -48,7 +48,9 @@ export default function Login() {
 
     try {
       response = await fetch(
-        `${process.env.API_URL}/students/${userData.registrationNumber.toUpperCase()}/${userData.email.toLowerCase()}/`,
+        `${
+          process.env.API_URL
+        }/students/${userData.registrationNumber.toUpperCase()}/${userData.email.toLowerCase()}/`,
       )
     } catch (error) {
       setLoading(false)

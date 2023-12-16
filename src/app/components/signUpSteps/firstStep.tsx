@@ -71,7 +71,9 @@ export default function SignUpFirstStep({
 
     try {
       response = await fetch(
-        `${process.env.API_URL}/students/${userData.registrationNumber.toUpperCase()}/${userData.email.toLowerCase()}/`,
+        `${
+          process.env.API_URL
+        }/students/${userData.registrationNumber.toUpperCase()}/${userData.email.toLowerCase()}/`,
       )
     } catch (error) {
       console.log(error)
@@ -83,7 +85,11 @@ export default function SignUpFirstStep({
 
       const db = getFirestore()
 
-      const docRef = doc(db, 'Students', userData.registrationNumber.toUpperCase())
+      const docRef = doc(
+        db,
+        'Students',
+        userData.registrationNumber.toUpperCase(),
+      )
 
       const docSnap = await getDoc(docRef)
 

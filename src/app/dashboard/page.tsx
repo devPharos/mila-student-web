@@ -18,7 +18,7 @@ export default function Dashboard() {
     student,
     group,
     groups,
-    period,
+    // period,
     periods,
     periodDate,
     setGroup,
