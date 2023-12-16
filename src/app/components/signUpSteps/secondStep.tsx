@@ -57,8 +57,8 @@ export default function SignUpSecondStep({
     data: TSignUpSecondStepData,
   ) => {
     const userSignUpSecondStepData: IUserData = {
-      email: userFirstStepData?.email,
-      registrationNumber: userFirstStepData?.registrationNumber,
+      email: userFirstStepData?.email.toLowerCase(),
+      registrationNumber: userFirstStepData?.registrationNumber.toUpperCase(),
       studentID: userFirstStepData?.studentID,
       password: data.password,
     }

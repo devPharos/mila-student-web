@@ -54,6 +54,8 @@ interface IRegisterContext {
     contactEmail: string
     contact_orl: string
     contact_mia: string
+    allowed_users: string
+    limit_periods_to_students: number
   }
   updateProfilePic: (
     registrationNumber: string,
@@ -93,11 +95,15 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     contactEmail: string
     contact_orl: string
     contact_mia: string
+    allowed_users: string
+    limit_periods_to_students: number
   }>({
     maxAbsenses: 0,
     contactEmail: '',
     contact_orl: '',
     contact_mia: '',
+    allowed_users: '',
+    limit_periods_to_students: 0,
   })
 
   const [period, setPeriod] = useState<StudentPeriod | null>(null)
@@ -129,7 +135,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
         const year = today.getFullYear()
         const thisPeriod = year + '-' + (month + 1).toString().padStart(2, '0')
         const response = await fetch(
-          `${process.env.API_URL}/students/dashboard/${studentRegistration}/${thisPeriod}`,
+          `${process.env.API_URL}/students/dashboard/${studentRegistration}`,
         )
         const data = await response.json()
 
@@ -158,7 +164,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function authStateChanged(user: User | null) {
-    if (user && user.email) {
+    if (user && user.email?.toLowerCase()) {
       const db = getFirestore()
 
       onSnapshot(query(collection(db, 'Params')), (snapshotQuery) => {
@@ -170,7 +176,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
       const q = query(
         collection(db, 'Students'),
-        where('email', '==', user.email),
+        where('email', '==', user.email.toLowerCase()),
       )
 
       onSnapshot(q, (snapshotQuery) => {
@@ -313,7 +319,7 @@ const logIn = (
     .then(() => {
       return signInWithEmailAndPassword(
         auth,
-        userFormData.email,
+        userFormData.email.toLowerCase(),
         userFormData.password,
       )
         .then(() => {
@@ -343,7 +349,7 @@ const forgotPW = async (
   setRecoverySent: Dispatch<SetStateAction<boolean>>,
 ) => {
   try {
-    await sendPasswordResetEmail(auth, userFormData.email)
+    await sendPasswordResetEmail(auth, userFormData.email.toLowerCase())
     setRecoverySent(true)
   } catch (err) {
     setLoginError(true)

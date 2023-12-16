@@ -18,6 +18,7 @@ export default function Dashboard() {
     student,
     group,
     groups,
+    period,
     periods,
     periodDate,
     setGroup,
@@ -166,13 +167,18 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
-              {groups.map((g) => (
-                <>
-                  <DashboardClassCard group={g} />
+              {groups.map((g) => {
+                if (g.classes && g.classes.length > 0) {
+                  return (
+                    <>
+                      <DashboardClassCard group={g} />
 
-                  <DashboardClassesCard group={g} />
-                </>
-              ))}
+                      <DashboardClassesCard group={g} />
+                    </>
+                  )
+                }
+                return null
+              })}
             </div>
           </div>
         </>

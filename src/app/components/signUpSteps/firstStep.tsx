@@ -57,8 +57,8 @@ export default function SignUpFirstStep({
     data: TSignUpFirstStepData,
   ) => {
     const userSignUpFirstStepData: TSignUpFirstStepData = {
-      email: data.email,
-      registrationNumber: data.registrationNumber,
+      email: data.email.toLowerCase(),
+      registrationNumber: data.registrationNumber.toUpperCase(),
     }
 
     verifyCredentials(userSignUpFirstStepData)
@@ -71,7 +71,7 @@ export default function SignUpFirstStep({
 
     try {
       response = await fetch(
-        `${process.env.API_URL}/students/${userData.registrationNumber}/${userData.email}/`,
+        `${process.env.API_URL}/students/${userData.registrationNumber.toUpperCase()}/${userData.email.toLowerCase()}/`,
       )
     } catch (error) {
       console.log(error)
@@ -83,14 +83,14 @@ export default function SignUpFirstStep({
 
       const db = getFirestore()
 
-      const docRef = doc(db, 'Students', userData.registrationNumber)
+      const docRef = doc(db, 'Students', userData.registrationNumber.toUpperCase())
 
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
         const existentUser = {
-          email: userData.email,
-          registrationNumber: userData.registrationNumber,
+          email: userData.email.toLowerCase(),
+          registrationNumber: userData.registrationNumber.toUpperCase(),
           studentID,
         }
 
@@ -102,8 +102,8 @@ export default function SignUpFirstStep({
         changeStep('step-1')
 
         const partialUserData: IUserFirstStepData = {
-          email: userData.email,
-          registrationNumber: userData.registrationNumber,
+          email: userData.email.toLowerCase(),
+          registrationNumber: userData.registrationNumber.toUpperCase(),
           studentID,
         }
 

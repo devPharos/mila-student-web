@@ -48,7 +48,7 @@ export default function Login() {
 
     try {
       response = await fetch(
-        `${process.env.API_URL}/students/${userData.registrationNumber}/${userData.email}/`,
+        `${process.env.API_URL}/students/${userData.registrationNumber.toUpperCase()}/${userData.email.toLowerCase()}/`,
       )
     } catch (error) {
       setLoading(false)
@@ -80,9 +80,9 @@ export default function Login() {
     data: TLoginFormData,
   ) => {
     const userLoginData: TLoginFormData = {
-      email: data.email,
+      email: data.email.toLowerCase(),
       password: data.password,
-      registrationNumber: data.registrationNumber,
+      registrationNumber: data.registrationNumber.toUpperCase(),
     }
 
     verifyUser(userLoginData)

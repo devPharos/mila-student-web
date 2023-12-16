@@ -49,7 +49,7 @@ export default function Login() {
     setCredentialError(false)
     setLoading(true)
     const userLoginData: TLoginFormData = {
-      email: data.email,
+      email: data.email.toLowerCase(),
     }
 
     await forgotPW(userLoginData, setCredentialError, setRecoverySent)
