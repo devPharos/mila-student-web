@@ -63,6 +63,13 @@ interface IRegisterContext {
     file: Blob,
   ) => void
   updateDashboard: (data: unknown) => void
+  setPeriodDate: React.Dispatch<React.SetStateAction<string | null>>
+  setInitializing: React.Dispatch<React.SetStateAction<boolean>>
+  initializing: boolean
+  getDashboardData: (
+    studentRegistration: number | null,
+    selectedPeriod?: string,
+  ) => Promise<void>
 }
 
 const defaultStudent = {
@@ -88,6 +95,7 @@ export const RegisterContext = createContext<IRegisterContext>(
 )
 
 function RegisterProvider({ children }: { children: React.ReactNode }) {
+  const [initializing, setInitializing] = useState(true)
   const [student, setStudent] = useState<Student>(defaultStudent)
   const [dashboard, setDashboard] = useState<Dashboard>(defaultDashboard)
   const [params, setParams] = useState<{
@@ -127,13 +135,18 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
     return unique
   }
 
-  async function getDashboardData(studentRegistration: number | null) {
+  async function getDashboardData(
+    studentRegistration: number | null,
+    selectedPeriod?: string,
+  ) {
     if (student) {
       try {
+        setInitializing(true)
         const today = new Date()
         const month = today.getMonth()
         const year = today.getFullYear()
         const thisPeriod = year + '-' + (month + 1).toString().padStart(2, '0')
+        const period = selectedPeriod || thisPeriod
         const response = await fetch(
           `${process.env.API_URL}/students/dashboard/${studentRegistration}`,
         )
@@ -141,7 +154,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
         setDashboard({ ...dashboard, ...data.data, fromDate: new Date() })
         data.data.periods.forEach((p: StudentPeriod) => {
-          if (p.period === thisPeriod) {
+          if (p.period === period) {
             setPeriod(p)
           }
         })
@@ -152,7 +165,8 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
         const myPeriods = await findUnique(data.data.periods.reverse())
         setPeriodDates(myPeriods)
-        setPeriodDate(thisPeriod)
+        setPeriodDate(period)
+        setInitializing(false)
       } catch (error) {
         console.log(error)
       }
@@ -303,6 +317,10 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
         periodDate,
         periodDates,
         params,
+        setPeriodDate,
+        getDashboardData,
+        setInitializing,
+        initializing,
       }}
     >
       {children}

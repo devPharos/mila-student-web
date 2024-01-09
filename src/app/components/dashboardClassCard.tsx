@@ -80,13 +80,13 @@ export function DashboardClassCard({ group }: any) {
                   }}
                 />
 
-                <div className="absolute top-[13px] left-[13px]">
+                <div className="absolute top-[22px] left-[22px]">
                   <CircularProgress
                     aria-label="Loading..."
                     size="lg"
                     value={group?.givenContentPercentage}
                     classNames={{
-                      svg: 'w-[150px] h-[150px] ',
+                      svg: 'w-[130px] h-[130px] ',
                       indicator: 'stroke-error',
                       track: 'stroke-error-light',
                       value: 'text-md text-neutral-dark',

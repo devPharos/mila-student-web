@@ -6,14 +6,15 @@ import { Header } from '../components/header'
 import { PeriodStatusCard } from '../components/periodStatusCard'
 
 import { useRegister } from '../hooks/register'
-import { isAfter, isBefore, parseISO, subDays } from 'date-fns'
+import { format, isAfter, isBefore, parseISO, subDays } from 'date-fns'
 import { StudentGroup } from '../@types/dashboard'
 import DashboardLoading from '../components/dashboardLoading'
 import Link from 'next/link'
 import { ClassPeriodCard } from '../components/dashboardClassPeriodCard'
+import { Card, CardHeader } from '@nextui-org/react'
 
 export default function Dashboard() {
-  const [initializing, setInitializing] = useState(true)
+  const [openSelect, setOpenSelect] = useState(false)
   const {
     student,
     group,
@@ -22,6 +23,9 @@ export default function Dashboard() {
     periods,
     periodDate,
     setGroup,
+    initializing,
+    getDashboardData,
+    setInitializing,
     frequency,
     params,
   } = useRegister()
@@ -94,6 +98,10 @@ export default function Dashboard() {
     }
   }, [periodDate])
 
+  const handleSelectPeriod = async (selectedPeriod: string) => {
+    await getDashboardData(Number(student.registration), selectedPeriod)
+  }
+
   return (
     <>
       {initializing ? (
@@ -149,10 +157,6 @@ export default function Dashboard() {
               <div className="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-5 gap-2 items-center">
                 <div className="lg:hidden md:hidden"></div>
 
-                <div className="col-span-1">
-                  <ClassPeriodCard />
-                </div>
-
                 <div className="col-span-2">
                   <PeriodStatusCard
                     type="absence"
@@ -166,7 +170,73 @@ export default function Dashboard() {
                     value={frequency[frequency.length - 1].percFrequency || 0}
                   />
                 </div>
+
+                <div
+                  className="col-span-1 cursor-pointer"
+                  onClick={() => setOpenSelect(!openSelect)}
+                >
+                  <ClassPeriodCard isOpen={openSelect} />
+                </div>
               </div>
+              {openSelect && (
+                <div className="w-full flex justify-end">
+                  <Card
+                    shadow="none"
+                    classNames={{
+                      header: [
+                        'text-primary max-sm:text-sm',
+                        'p-0',
+                        'max-sm:font-normal',
+                        'flex-col justify-center gap-2',
+                      ],
+                      base: [
+                        'rounded-b-[24px] rounded-l-[24px] rounded-se-none cursor-pointer max-w-fit',
+                        'max-sm:rounded-[16px]',
+                        'py-4',
+                        'max-sm:py-2',
+                        'px-4',
+                      ],
+                    }}
+                  >
+                    <CardHeader>
+                      {periods
+                        .slice(
+                          periods.findIndex(
+                            (period) =>
+                              period.period ===
+                              new Date().getFullYear() +
+                                '-' +
+                                (new Date().getMonth() + 1)
+                                  .toString()
+                                  .padStart(2, '0'),
+                          ),
+                        )
+                        .map((period, index) => {
+                          if (index <= params.limit_periods_to_students) {
+                            return (
+                              <>
+                                <span
+                                  onClick={() =>
+                                    handleSelectPeriod(period.period)
+                                  }
+                                >
+                                  {format(
+                                    parseISO(period.period || ''),
+                                    'MMMM, yyyy',
+                                  )}
+                                </span>
+                                {index !== params.limit_periods_to_students && (
+                                  <div className="h-px w-full bg-gray-200"></div>
+                                )}
+                              </>
+                            )
+                          }
+                          return null
+                        })}
+                    </CardHeader>
+                  </Card>
+                </div>
+              )}
               {groups.map((g) => {
                 if (g.classes && g.classes.length > 0) {
                   return (

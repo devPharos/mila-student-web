@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.2.0",
-    "@next/font": "^13.4.12",
     "@nextui-org/react": "^2.0.22",
     "@types/node": "20.4.5",
     "@types/react": "18.2.18",
