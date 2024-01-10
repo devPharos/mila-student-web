@@ -1,7 +1,7 @@
 import './globals.css'
 import { Metadata } from 'next'
 import { ReactNode } from 'react'
-import localFont from "next/font/local"
+import localFont from 'next/font/local'
 
 const myriadPro = localFont({
   src: [
