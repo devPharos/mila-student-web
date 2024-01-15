@@ -30,7 +30,7 @@ export function DashboardClassesCard({ group }: any) {
   )
 
   return (
-    <Accordion itemClasses={itemClasses} className="px-0">
+    <Accordion itemClasses={itemClasses} className="px-0 mb-10">
       <AccordionItem
         aria-label="classes"
         title={`${classes?.length} Classes`}
