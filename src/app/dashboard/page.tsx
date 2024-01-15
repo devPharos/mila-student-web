@@ -22,6 +22,7 @@ export default function Dashboard() {
     // period,
     periods,
     periodDate,
+    setPeriodDate,
     setGroup,
     setGroups,
     initializing,
@@ -101,7 +102,13 @@ export default function Dashboard() {
   }, [periodDate])
 
   const handleSelectPeriod = async (selectedPeriod: string) => {
-    await getDashboardData(Number(student.registration), selectedPeriod)
+    setInitializing(true)
+    setOpenSelect(false)
+    setPeriodDate(selectedPeriod)
+
+    setTimeout(() => {
+      setInitializing(false)
+    }, 1000)
   }
 
   return (
@@ -155,7 +162,7 @@ export default function Dashboard() {
         <>
           <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
             <Header studentData={student} />
-            <div className="flex flex-col gap-4 max-w-[960px] w-full px-6 py-10">
+            <div className="relative flex flex-col gap-4 max-w-[960px] w-full px-6 py-10">
               <div className="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-5 gap-2 items-center">
                 <div className="lg:hidden md:hidden"></div>
 
@@ -181,7 +188,7 @@ export default function Dashboard() {
                 </div>
               </div>
               {openSelect && (
-                <div className="w-full flex justify-end">
+                <div className="w-full flex justify-end absolute right-6 top-28 z-50">
                   <Card
                     shadow="none"
                     classNames={{
@@ -192,7 +199,7 @@ export default function Dashboard() {
                         'flex-col justify-center gap-2',
                       ],
                       base: [
-                        'rounded-b-[24px] rounded-l-[24px] rounded-se-none cursor-pointer max-w-fit',
+                        'rounded-b-[24px] rounded-l-[24px]  rounded-se-none cursor-pointer max-w-fit shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]',
                         'max-sm:rounded-[16px]',
                         'py-4',
                         'max-sm:py-2',
