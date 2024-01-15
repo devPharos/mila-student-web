@@ -6,7 +6,14 @@ import { Header } from '../components/header'
 import { PeriodStatusCard } from '../components/periodStatusCard'
 
 import { useRegister } from '../hooks/register'
-import { format, isAfter, isBefore, parseISO, subDays } from 'date-fns'
+import {
+  format,
+  isAfter,
+  isBefore,
+  parseISO,
+  subDays,
+  subMonths,
+} from 'date-fns'
 import { StudentGroup } from '../@types/dashboard'
 import DashboardLoading from '../components/dashboardLoading'
 import Link from 'next/link'
@@ -15,6 +22,7 @@ import { Card, CardHeader } from '@nextui-org/react'
 
 export default function Dashboard() {
   const [openSelect, setOpenSelect] = useState(false)
+  const [loading, setLoading] = useState(true)
   const {
     student,
     group,
@@ -22,18 +30,18 @@ export default function Dashboard() {
     // period,
     periods,
     periodDate,
+    periodDates,
     setPeriodDate,
     setGroup,
-    setGroups,
-    initializing,
-    getDashboardData,
-    setInitializing,
+    setPeriodGroups,
+    periodGroups,
     frequency,
     params,
   } = useRegister()
 
   useEffect(() => {
     if (periodDate) {
+      setLoading(true)
       const retGroups: StudentGroup[] = []
       let periodAbsences = 0
       groups.forEach((g) => {
@@ -96,24 +104,24 @@ export default function Dashboard() {
         return (group.periodAbsences = periodAbsences)
       })
       setGroup(retGroups[0])
-      setGroups(retGroups)
-      setInitializing(false)
+      setPeriodGroups(retGroups)
+      setLoading(false)
     }
   }, [periodDate])
 
-  const handleSelectPeriod = async (selectedPeriod: string) => {
-    setInitializing(true)
-    setOpenSelect(false)
-    setPeriodDate(selectedPeriod)
+  const handleSelectPeriod = (selectedPeriod: string) => {
+    setLoading(true)
 
     setTimeout(() => {
-      setInitializing(false)
+      setOpenSelect(false)
+      setPeriodDate(selectedPeriod)
+      setLoading(false)
     }, 1000)
   }
 
   return (
     <>
-      {initializing ? (
+      {loading ? (
         <DashboardLoading />
       ) : frequency[frequency.length - 1].percFrequency < params.maxAbsenses ? (
         <>
@@ -187,7 +195,7 @@ export default function Dashboard() {
                   <ClassPeriodCard isOpen={openSelect} />
                 </div>
               </div>
-              {openSelect && (
+              {openSelect && periodDate && (
                 <div className="w-full flex justify-end absolute right-6 top-28 z-50">
                   <Card
                     shadow="none"
@@ -208,45 +216,36 @@ export default function Dashboard() {
                     }}
                   >
                     <CardHeader>
-                      {periods
-                        .slice(
-                          periods.findIndex(
-                            (period) =>
-                              period.period ===
-                              new Date().getFullYear() +
-                                '-' +
-                                (new Date().getMonth() + 1)
-                                  .toString()
-                                  .padStart(2, '0'),
-                          ),
-                        )
-                        .map((period, index) => {
-                          if (index <= params.limit_periods_to_students) {
-                            return (
-                              <>
-                                <span
-                                  onClick={() =>
-                                    handleSelectPeriod(period.period)
-                                  }
-                                >
-                                  {format(
-                                    parseISO(period.period || ''),
-                                    'MMMM, yyyy',
-                                  )}
-                                </span>
-                                {index !== params.limit_periods_to_students && (
-                                  <div className="h-px w-full bg-gray-200"></div>
-                                )}
-                              </>
+                      {periodDates.map((period, index) => {
+                        if (
+                          period <= format(new Date(), 'Y-MM') &&
+                          period >=
+                            format(
+                              subMonths(
+                                new Date(),
+                                params.limit_periods_to_students,
+                              ),
+                              'Y-MM',
                             )
-                          }
-                          return null
-                        })}
+                        ) {
+                          return (
+                            <>
+                              <span onClick={() => handleSelectPeriod(period)}>
+                                {format(parseISO(period || ''), 'MMMM, yyyy')}
+                              </span>
+                              {index !== params.limit_periods_to_students && (
+                                <div className="h-px w-full bg-gray-200"></div>
+                              )}
+                            </>
+                          )
+                        }
+                        return null
+                      })}
                     </CardHeader>
                   </Card>
                 </div>
               )}
-              {groups.map((g) => {
+              {periodGroups.map((g) => {
                 return (
                   <>
                     <DashboardClassCard group={g} />

@@ -66,6 +66,8 @@ interface IRegisterContext {
   updateDashboard: (data: unknown) => void
   setPeriodDate: React.Dispatch<React.SetStateAction<string | null>>
   setInitializing: React.Dispatch<React.SetStateAction<boolean>>
+  setPeriodGroups: React.Dispatch<React.SetStateAction<StudentGroup[]>>
+  periodGroups: StudentGroup[]
   initializing: boolean
   getDashboardData: (
     studentRegistration: number | null,
@@ -123,6 +125,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
 
   const [group, setGroup] = useState<StudentGroup | null>(null)
   const [groups, setGroups] = useState<StudentGroup[]>([])
+  const [periodGroups, setPeriodGroups] = useState<StudentGroup[]>([])
 
   const [frequency, setFrequency] = useState<StudentFrequency[]>([])
 
@@ -323,6 +326,8 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
         getDashboardData,
         setInitializing,
         initializing,
+        setPeriodGroups,
+        periodGroups,
       }}
     >
       {children}
