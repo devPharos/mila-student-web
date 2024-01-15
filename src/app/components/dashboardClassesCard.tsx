@@ -24,7 +24,7 @@ export function DashboardClassesCard({ group }: any) {
     content: 'pt-4',
   }
 
-  const classes = group?.classes.filter(
+  const classes = group?.classes?.filter(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (classStatus: { presenceStatus: any }) => classStatus.presenceStatus,
   )

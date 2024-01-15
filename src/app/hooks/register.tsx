@@ -48,6 +48,7 @@ interface IRegisterContext {
   group: StudentGroup | null
   setGroup: React.Dispatch<React.SetStateAction<StudentGroup | null>>
   groups: StudentGroup[]
+  setGroups: React.Dispatch<React.SetStateAction<StudentGroup[]>>
   frequency: StudentFrequency[]
   params: {
     maxAbsenses: number
@@ -312,6 +313,7 @@ function RegisterProvider({ children }: { children: React.ReactNode }) {
         periods,
         frequency,
         group,
+        setGroups,
         setGroup,
         groups,
         periodDate,

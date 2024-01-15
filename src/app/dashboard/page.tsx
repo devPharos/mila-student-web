@@ -23,6 +23,7 @@ export default function Dashboard() {
     periods,
     periodDate,
     setGroup,
+    setGroups,
     initializing,
     getDashboardData,
     setInitializing,
@@ -94,6 +95,7 @@ export default function Dashboard() {
         return (group.periodAbsences = periodAbsences)
       })
       setGroup(retGroups[0])
+      setGroups(retGroups)
       setInitializing(false)
     }
   }, [periodDate])
@@ -111,7 +113,7 @@ export default function Dashboard() {
           <div className="min-h-screen bg-neutral-lighter flex items-center flex-col">
             <Header studentData={student} />
 
-            <div className="bg-neutral-lighter flex justify-center items-center flex-col p-12 text-sm text-left bg-white rounded-2xl mt-6 font-normal text-gray-600 ">
+            <div className="flex justify-center items-center flex-col p-12 text-sm text-left bg-white rounded-2xl mt-6 font-normal text-gray-600 ">
               <p>Dear student,</p>
               <p className="mt-4">
                 Please send an e-mail to{' '}
@@ -238,16 +240,13 @@ export default function Dashboard() {
                 </div>
               )}
               {groups.map((g) => {
-                if (g.classes && g.classes.length > 0) {
-                  return (
-                    <>
-                      <DashboardClassCard group={g} />
+                return (
+                  <>
+                    <DashboardClassCard group={g} />
 
-                      <DashboardClassesCard group={g} />
-                    </>
-                  )
-                }
-                return null
+                    <DashboardClassesCard group={g} />
+                  </>
+                )
               })}
             </div>
           </div>
